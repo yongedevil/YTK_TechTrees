@@ -1,0 +1,7 @@
+v1.0
+- Initial release
+- Created custom tech tree
+- Created new part probeStackAdapter as a starting control part
+- Added support for Unlocks node in the RDNode.  Parts listed in Unlocks will be modified to require the parent RDNode when the TechTree is active.
+- Added support for YT_TreeDeclaration nodes to give details for tech trees.  These nodes tell the mod what tech trees are available to give a selection for new games.
+- Added tech tree selection window for new games.
