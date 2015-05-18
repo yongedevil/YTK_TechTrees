@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <int name="window_width">600</int>
+    <int name="window_height">350</int>
+	<int name="dropdown_maxSize">4</int>
+    <string name="window_title">Select Tech Tree</string>
+    <string name="intro_text">welcome to the Kerbal Tech Tree Changeout mod.</string>
+	<string name="conferm_text">I've picked the tree I want</string>
+	
+	<bool name="buyStartParts">1</bool>
+	<string name="YT_techTreeScenarioNode_treeSelectedField">treeSelected</string>
+	
+	<string name="YT_treeDeclarationNode_nodeType">YT_TreeDeclaration</string>
+	<string name="YT_treeDeclarationNode_titleField">title</string>
+	<string name="YT_treeDeclarationNode_urlField">url</string>
+	<string name="YT_treeDeclarationNode_descriptionField">description</string>
+	
+	<string name="RDNode_startID">start</string>
+	<string name="RDNode_unlocksNode_nodeType">Unlocks</string>
+	<string name="RDNode_unlocksNode_partField">part</string>
+</config>
