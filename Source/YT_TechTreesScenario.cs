@@ -28,7 +28,7 @@ namespace YongeTechKerbal
      * each game.                                           *
     \*======================================================*/
     [KSPScenario(ScenarioCreationOptions.AddToNewScienceSandboxGames | ScenarioCreationOptions.AddToNewCareerGames, GameScenes.SPACECENTER)]
-    public class YT_TechTreeScenario : ScenarioModule
+    public class YT_TechTreesScenario : ScenarioModule
     {
         //Custom YT_TreeDeclaration node
         //gives details on tech trees available
@@ -55,7 +55,7 @@ namespace YongeTechKerbal
         bool treeSelected;
         List<YT_TreeDeclaration> treeDeclarationsList;
 
-        YT_TechTreeSelectionWindow m_selectionWindow;
+        YT_TechTreesSelectionWindow m_selectionWindow;
 
 
         /************************************************************************\
@@ -143,7 +143,7 @@ namespace YongeTechKerbal
                 if (!treeSelected)
                 {
                     //Create tree selection window and pass it the list of tree declarations
-                    m_selectionWindow = new YT_TechTreeSelectionWindow();
+                    m_selectionWindow = new YT_TechTreesSelectionWindow();
                     m_selectionWindow.TechTrees = treeDeclarationsList.ToArray();
                 }
                 else
@@ -171,7 +171,7 @@ namespace YongeTechKerbal
             Debug.Log("YT_TechTreeScenario.ReadConfigFile()");
 #endif
             //Read Mod Configuration File
-            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreeScenario>();
+            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesScenario>();
             configFile.load();
 
             m_setting_buyStartParts = configFile.GetValue<bool>("buyStartParts");

@@ -12,7 +12,7 @@ namespace YongeTechKerbal
      * Class to handle drawing the tree selection window    *
      * to let the player select a tree to play with.        *
     \*======================================================*/
-    class YT_TechTreeSelectionWindow
+    class YT_TechTreesSelectionWindow
     {
         private int windowWidth;
         private int windowHeight;
@@ -99,7 +99,7 @@ namespace YongeTechKerbal
          * Constructor                                                          *
          *                                                                      *
         \************************************************************************/
-        public YT_TechTreeSelectionWindow()
+        public YT_TechTreesSelectionWindow()
         {
             //initialize variables
             m_done = false;
@@ -215,7 +215,7 @@ namespace YongeTechKerbal
 #if DEBUG
             Debug.Log("YT_TechTreeSelectionWindow.ReadConfigFile()");
 #endif
-            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreeSelectionWindow>();
+            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesSelectionWindow>();
 
             configFile.load();
             windowWidth = configFile.GetValue<int>("window_width");
