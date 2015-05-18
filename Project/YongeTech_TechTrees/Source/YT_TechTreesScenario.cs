@@ -30,17 +30,21 @@ namespace YongeTechKerbal
     [KSPScenario(ScenarioCreationOptions.AddToNewScienceSandboxGames | ScenarioCreationOptions.AddToNewCareerGames, GameScenes.SPACECENTER)]
     public class YT_TechTreesScenario : ScenarioModule
     {
-        //Custom YT_TreeDeclaration node
+        //Stock Tree information
+        string stockTree_url;
+        string stockTree_title;
+        string stockTree_description;
+
+        //Custom TechTree fields
         //gives details on tech trees available
         //title is the displayed name for the tree
-        //url is the location of the config file with the TechTree node
-        string YT_treeDeclarationNode_nodeType;
-        string YT_treeDeclarationNode_titleField;
-        string YT_treeDeclarationNode_urlField;
-        string YT_treeDeclarationNode_descriptionField;
+        //description should describe the tree to the player
+        string TechTree_titleField;
+        string TechTree_descriptionField;
 
         //Custom Unlocks node added to RDNode node in TechTree node
-        //lists parts unlocked by that RDNode
+        //RDNode_startID is the id of the starting node
+        //UnlocksNode lists parts unlocked by that RDNode
         string RDNode_startID;
         string RDNode_UnlocksNode_nodeType;
         string RDNode_UnlocksNode_partField;
@@ -49,12 +53,10 @@ namespace YongeTechKerbal
         //saves if the tech tree has been selected for this game
         string YT_TechTreeScenarioNode_treeSelectedField;
 
+
         bool m_setting_buyStartParts;
-
-        
-        bool treeSelected;
-        List<YT_TreeDeclaration> treeDeclarationsList;
-
+        bool m_treeSelected;
+        List<YT_TreeDeclaration> m_treeDeclarationsList;
         YT_TechTreesSelectionWindow m_selectionWindow;
 
 
@@ -66,18 +68,18 @@ namespace YongeTechKerbal
         public override void OnAwake()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeScenario.Awake()");
+            Debug.Log("YT_TechTreeScenario.OnAwake()");
 #endif
-            YT_treeDeclarationNode_nodeType = null;
-            YT_treeDeclarationNode_titleField = null;
-            YT_treeDeclarationNode_urlField = null;
-            YT_treeDeclarationNode_descriptionField = null;
+            TechTree_titleField = null;
+            TechTree_descriptionField = null;
+            RDNode_startID = null;
             RDNode_UnlocksNode_nodeType = null;
             RDNode_UnlocksNode_partField = null;
+            YT_TechTreeScenarioNode_treeSelectedField = null;
 
             m_setting_buyStartParts = true;
-            treeSelected = false;
-            treeDeclarationsList = new List<YT_TreeDeclaration>();
+            m_treeSelected = false;
+            m_treeDeclarationsList = new List<YT_TreeDeclaration>();
             m_selectionWindow = null;
         }
 
@@ -98,15 +100,13 @@ namespace YongeTechKerbal
             ReadConfigFile();
 
             //loads data on the tree delcarations
-            LoadModData();
+            LoadTechTreeData();
 
             //Read data from ConfigNode
             if (node.HasValue(YT_TechTreeScenarioNode_treeSelectedField))
-                treeSelected = ("TRUE" == (node.GetValue(YT_TechTreeScenarioNode_treeSelectedField)).ToUpper());
+                m_treeSelected = ("TRUE" == (node.GetValue(YT_TechTreeScenarioNode_treeSelectedField)).ToUpper());
             else
-                treeSelected = false;
-
-
+                m_treeSelected = false;
         }
 
 
@@ -123,7 +123,7 @@ namespace YongeTechKerbal
             base.OnSave(node);
 
             //Save data to ConfigNode
-            node.AddValue(YT_TechTreeScenarioNode_treeSelectedField, treeSelected);
+            node.AddValue(YT_TechTreeScenarioNode_treeSelectedField, m_treeSelected);
         }
 
 
@@ -140,11 +140,11 @@ namespace YongeTechKerbal
             //Check that the game mode is Career or Science
             if (Game.Modes.CAREER == HighLogic.CurrentGame.Mode || Game.Modes.SCIENCE_SANDBOX == HighLogic.CurrentGame.Mode)
             {
-                if (!treeSelected)
+                if (!m_treeSelected)
                 {
                     //Create tree selection window and pass it the list of tree declarations
                     m_selectionWindow = new YT_TechTreesSelectionWindow();
-                    m_selectionWindow.TechTrees = treeDeclarationsList.ToArray();
+                    m_selectionWindow.TechTrees = m_treeDeclarationsList.ToArray();
                 }
                 else
                 {
@@ -154,16 +154,15 @@ namespace YongeTechKerbal
             }
             else
             {
-                treeSelected = true;
+                m_treeSelected = true;
             }
-
         }
 
         /************************************************************************\
          * YT_TechTreeScenario class                                            *
          * ReadConfigFile function                                              *
          *                                                                      *
-         * Reads all AST_TechTree Decleartion nodes.                            *
+         * Reads settings in from the mod's configuration file.                 *
         \************************************************************************/
         private void ReadConfigFile()
         {
@@ -174,25 +173,28 @@ namespace YongeTechKerbal
             KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesScenario>();
             configFile.load();
 
+            stockTree_url = configFile.GetValue<string>("stockTree_url");
+            stockTree_title = configFile.GetValue<string>("stockTree_title");
+            stockTree_description = configFile.GetValue<string>("stockTree_description");
+
             m_setting_buyStartParts = configFile.GetValue<bool>("buyStartParts");
             YT_TechTreeScenarioNode_treeSelectedField = configFile.GetValue<string>("YT_techTreeScenarioNode_treeSelectedField");
 
-            YT_treeDeclarationNode_nodeType = configFile.GetValue<string>("YT_treeDeclarationNode_nodeType");
-            YT_treeDeclarationNode_titleField = configFile.GetValue<string>("YT_treeDeclarationNode_titleField");
-            YT_treeDeclarationNode_urlField = configFile.GetValue<string>("YT_treeDeclarationNode_urlField");
-            YT_treeDeclarationNode_descriptionField = configFile.GetValue<string>("YT_treeDeclarationNode_descriptionField");
+            TechTree_titleField = configFile.GetValue<string>("TechTree_titleField");
+            TechTree_descriptionField = configFile.GetValue<string>("TechTree_descriptionField");
 
             RDNode_startID = configFile.GetValue<string>("RDNode_startID");
             RDNode_UnlocksNode_nodeType = configFile.GetValue<string>("RDNode_unlocksNode_nodeType");
             RDNode_UnlocksNode_partField = configFile.GetValue<string>("RDNode_unlocksNode_partField");
 #if DEBUG
             string values = "";
+            values += "stockTree_url = " + stockTree_url + "\n";
+            values += "stockTree_title = " + stockTree_title + "\n";
+            values += "stockTree_description = " + stockTree_description + "\n";
             values += "m_setting_buyStartParts = " + m_setting_buyStartParts + "\n";
             values += "YT_TechTreeScenarioNode_treeSelectedField = " + YT_TechTreeScenarioNode_treeSelectedField + "\n";
-            values += "YT_treeDeclarationNode_nodeType = " + YT_treeDeclarationNode_nodeType + "\n";
-            values += "YT_treeDeclarationNode_titleField = " + YT_treeDeclarationNode_titleField + "\n";
-            values += "YT_treeDeclarationNode_urlField = " + YT_treeDeclarationNode_urlField + "\n";
-            values += "YT_treeDeclarationNode_descriptionField = " + YT_treeDeclarationNode_descriptionField + "\n";
+            values += "TechTree_titleField = " + TechTree_titleField + "\n";
+            values += "TechTree_descriptionField = " + TechTree_descriptionField + "\n";
             values += "RDNode_startID = " + RDNode_startID + "\n";
             values += "RDNode_UnlocksNode_nodeType = " + RDNode_UnlocksNode_nodeType + "\n";
             values += "RDNode_UnlocksNode_partField = " + RDNode_UnlocksNode_partField + "\n";
@@ -203,24 +205,57 @@ namespace YongeTechKerbal
 
         /************************************************************************\
          * YT_TechTreeScenario class                                            *
-         * LoadModData function                                                 *
+         * LoadTechTreeData function                                            *
          *                                                                      *
-         * Reads all AST_TechTree Decleartion nodes.                            *
+         * Finds TechTree ConfigNodes in the GameDatabase and sets up           *
+         * m_treeDeclarationsList with infor on each TechTree.                  *
         \************************************************************************/
-        private void LoadModData()
+        private void LoadTechTreeData()
         {
 #if DEBUG
             Debug.Log("YT_TechTreeScenario.LoadModData()");
 #endif
-            //Read in Tech Tree Declaration nodes from GameDatabase
-            foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes(YT_treeDeclarationNode_nodeType))
+            ConfigNode node;
+            string title;
+            string url;
+            string description;
+
+            //Traverse through game configs looking for TechTree configs
+            foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.AllConfigs)
             {
-#if DEBUG
-                Debug.Log("YT_TechTreeScenario.LoadModData() found " + YT_treeDeclarationNode_nodeType + " node\n" + node.ToString());
-#endif
-                if (node.HasValue(YT_treeDeclarationNode_titleField) && node.HasValue(YT_treeDeclarationNode_urlField))
+                if ("TechTree" == config.name)
                 {
-                    treeDeclarationsList.Add(new YT_TreeDeclaration(node.GetValue(YT_treeDeclarationNode_titleField), node.GetValue(YT_treeDeclarationNode_urlField), node.GetValue(YT_treeDeclarationNode_descriptionField)));
+#if DEBUG
+                    Debug.Log("YT_TechTreeScenario.LoadModData(): found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
+#endif
+                    node = config.config;
+                    url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
+
+                    //Check if this is the stock tree
+                    //use stock tree title and description loaded from mod config file if it is
+                    if (url == stockTree_url)
+                    {
+                        title = stockTree_title;
+                        description = stockTree_description;
+                    }
+
+                    //If not stock tree attempt to read title and description from the TechTree ConfigNode
+                    //if they can't be read default values are used instead
+                    else
+                    {
+                        if (node.HasValue(TechTree_titleField))
+                            title = node.GetValue(TechTree_titleField);
+                        else
+                            title = "Unnamed Tree (" + config.parent.url + ")";
+
+                        if (node.HasValue(TechTree_descriptionField))
+                            description = node.GetValue(TechTree_descriptionField);
+                        else
+                            description = "No description available.";
+                    }
+
+                    //Add information to treeDeclarationList
+                    m_treeDeclarationsList.Add(new YT_TreeDeclaration(title, url, description));
                 }
             }
         }
@@ -236,13 +271,13 @@ namespace YongeTechKerbal
 #if DEBUG_UPDATE
             Debug.Log("YT_TechTreeScenario.OnGUI()");
 #endif
-            if (!treeSelected && null != m_selectionWindow)
+            if (!m_treeSelected && null != m_selectionWindow)
             {
                 //Draw the tree selection window
                 m_selectionWindow.windowRect = GUI.Window(this.GetHashCode(), m_selectionWindow.windowRect, m_selectionWindow.DrawWindow, "Select Tech Tree", m_selectionWindow.WindowStyle);
 
                 //If a tree has been picked
-                if (treeSelected = m_selectionWindow.Done)
+                if (m_treeSelected = m_selectionWindow.Done)
                 {
                     ChangeTree(m_selectionWindow.TechTreeURL);
 #if DEBUG

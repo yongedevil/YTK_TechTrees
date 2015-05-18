@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ArrowtechTechTree")]
+[assembly: AssemblyTitle("YongeTech_TechTrees")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ArrowtechTechTree")]
+[assembly: AssemblyProduct("YongeTech_TechTrees")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7cd80197-fc4c-4824-98f2-f37a5629894d")]
+[assembly: Guid("34e24e41-924c-4b7d-9aec-53931502a9a3")]
 
 // Version information for an assembly consists of the following four values:
 //
