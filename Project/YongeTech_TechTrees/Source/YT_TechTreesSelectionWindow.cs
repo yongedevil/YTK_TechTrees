@@ -36,6 +36,7 @@ namespace YongeTechKerbal
 
         private const int CONFERM_WIDTH = 200;
 
+        private const int STATS_HEADER_HEIGHT = 20;
         private const int STATS_WIDTH = 200;
 
 
@@ -85,6 +86,7 @@ namespace YongeTechKerbal
 
         private GUIStyle m_textAreaStyle;
         private GUIStyle m_textAreaBoxStyle;
+        private GUIStyle m_textAreaHeaderStyle;
         private GUIStyle m_confermButtonStyle;
         private GUIStyle m_dropdownButtonStyle;
         private GUIStyle m_dropdownBoxStyle;
@@ -99,6 +101,7 @@ namespace YongeTechKerbal
         private Rect m_portraitNameRect;
         private Rect m_intoRect;
         private Rect m_treeDetailsRect;
+        private Rect m_treeStatsHeaderRect;
         private Rect m_treeStatsRect;
         private Rect m_dropdownRect;
         private Rect m_confermRect;
@@ -172,20 +175,21 @@ namespace YongeTechKerbal
             m_textAreaStyle.fontSize = 12;
 
             m_textAreaBoxStyle = new GUIStyle(HighLogic.Skin.textArea);
-            m_textAreaStyle.border = new RectOffset(2, 2, 2, 2);
             m_textAreaStyle.fontSize = 12;
+
+            m_textAreaHeaderStyle = new GUIStyle(HighLogic.Skin.textArea);
+            m_textAreaHeaderStyle.padding = new RectOffset(3, 3, 3, 3);
+            m_textAreaHeaderStyle.alignment = TextAnchor.UpperCenter;
+            m_textAreaHeaderStyle.normal.background = null;
+            m_textAreaHeaderStyle.fontSize = 14;
+            m_textAreaHeaderStyle.fontStyle = FontStyle.Bold;
+            m_textAreaHeaderStyle.normal.textColor = new Color(194f / 255f, 255f / 255f, 0f / 255f);
 
             m_portraitStyle = new GUIStyle(HighLogic.Skin.box);
             m_portraitStyle.padding = new RectOffset(0, 0, 0, 0);
             m_portraitStyle.normal.background = null;
 
-            m_portraitNameStyle = new GUIStyle(HighLogic.Skin.textArea);
-            m_portraitNameStyle.padding = new RectOffset(3, 3, 3, 3);
-            m_portraitNameStyle.normal.background = null;
-            m_portraitNameStyle.alignment = TextAnchor.UpperCenter;
-            m_portraitNameStyle.fontSize = 14;
-            m_portraitNameStyle.fontStyle = FontStyle.Bold;
-            m_portraitNameStyle.normal.textColor = new Color(194f / 255f, 255f / 255f, 0f / 255f);
+            m_portraitNameStyle = new GUIStyle(m_textAreaHeaderStyle);
         }
 
         /************************************************************************\
@@ -214,9 +218,15 @@ namespace YongeTechKerbal
             m_intoRect.height = m_portraitNameRect.yMax - m_portraitRect.yMin;
 
             //Tree stats and description area on the bottom
+            m_treeStatsHeaderRect = new Rect();
+            m_treeStatsHeaderRect.x = windowRect.width - (SPACING_BOARDER_RIGHT + STATS_WIDTH);;
+            m_treeStatsHeaderRect.y = m_intoRect.y + m_intoRect.height + SPACING_SECTION_VERTICAL * 2 + DROPDOWN_LINE;
+            m_treeStatsHeaderRect.width = STATS_WIDTH;
+            m_treeStatsHeaderRect.height = STATS_HEADER_HEIGHT;
+
             m_treeStatsRect = new Rect();
             m_treeStatsRect.x = windowRect.width - (SPACING_BOARDER_RIGHT + STATS_WIDTH);
-            m_treeStatsRect.y = m_intoRect.y + m_intoRect.height + SPACING_SECTION_VERTICAL * 2 + DROPDOWN_LINE;
+            m_treeStatsRect.y = m_treeStatsHeaderRect.y + m_treeStatsHeaderRect.height;
             m_treeStatsRect.width = STATS_WIDTH;
             m_treeStatsRect.height = windowRect.height - (m_treeStatsRect.y + SPACING_BOARDER_BOTTOM);
 
@@ -368,7 +378,9 @@ namespace YongeTechKerbal
 #endif
             GUI.Box(m_treeDetailsRect, m_techTrees[m_choiceIndex].desctription, m_textAreaStyle);
 
-            GUI.Box(m_treeStatsRect, "Tree Stats:\n\nTotal Cost: " + m_techTrees[m_choiceIndex].totalCost + "\nTotal Nodes: " + m_techTrees[m_choiceIndex].numNodes, m_textAreaBoxStyle);
+            GUI.TextArea(m_treeStatsHeaderRect, "Tree Stats", m_textAreaHeaderStyle);
+
+            GUI.Box(m_treeStatsRect, "\nTotal Cost: " + m_techTrees[m_choiceIndex].totalCost + "\nTotal Nodes: " + m_techTrees[m_choiceIndex].numNodes, m_textAreaBoxStyle);
         }
 
         /************************************************************************\

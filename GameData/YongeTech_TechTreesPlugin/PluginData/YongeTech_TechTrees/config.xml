@@ -7,8 +7,8 @@
 	<int name="dropdown_maxSize">4</int>
     <string name="window_title">Select Tech Tree</string>
     <string name="intro_text">Greetings, I'm Wernher Von Kerman in charge of Research and Development here at KSC.  At R&amp;D we take the science you collect and use it to develop new parts for you to blow up.
-	
-	Before we get started though, you have the YongeTech Tech Trees mod installed which allow us to select the technology tree we want to research for this space program.  You should pick one of the trees from the list below and we will load it up in the Research and Development Complex for you.</string>
+
+Before we get started though, you have the YongeTech Tech Trees mod installed which allow us to select the technology tree we want to research for this space program.  You should pick one of the trees from the list below and we will load it up in the Research and Development Complex for you.</string>
 	<string name="conferm_text">I've picked the tree I want</string>
 	
 	<bool name="buyStartParts">1</bool>
