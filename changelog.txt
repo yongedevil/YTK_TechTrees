@@ -1,6 +1,4 @@
 v1.0
-- Created custom tech tree
-- Created new part probeStackAdapter as a starting control part
 - Added support for Unlocks node in the RDNode.  Parts listed in Unlocks will be modified to require the parent RDNode when the TechTree is active.
 - Added tech tree selection window for new games.
 - Added support to load custom icons found in RDSimpleIcons fold for use in RDNodes.

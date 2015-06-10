@@ -13,11 +13,17 @@ namespace YongeTechKerbal
         public string url;
         public string desctription;
 
+        public int totalCost;
+        public int numNodes;
+
         public YT_TreeDeclaration(string title, string url, string description)
         {
             this.title = title;
             this.url = url;
             this.desctription = description;
+
+            totalCost = 0;
+            numNodes = 0;
         }
     }
 
@@ -254,10 +260,54 @@ namespace YongeTechKerbal
                             description = "No description available.";
                     }
 
+                    //create YT_TreeDeclaration and add stats
+                    YT_TreeDeclaration treeData = new YT_TreeDeclaration(title, url, description);
+                    CalculateTechTreeStats(node, treeData);
+
                     //Add information to treeDeclarationList
-                    m_treeDeclarationsList.Add(new YT_TreeDeclaration(title, url, description));
+                    m_treeDeclarationsList.Add(treeData);
                 }
             }
+        }
+
+        /************************************************************************\
+         * YT_TechTreeScenario class                                            *
+         * CalculateTechTreeStats function                                      *
+         *                                                                      *
+         * Calculates the stats for the given tech tree
+        \************************************************************************/
+        private void CalculateTechTreeStats(ConfigNode treeNode, YT_TreeDeclaration treeData)
+        {
+            int cost = 0;
+            int numNodes = 0;
+
+            foreach (ConfigNode RDNode in treeNode.nodes)
+            {
+                if ("RDNode" != RDNode.name)
+                    continue;
+
+                numNodes++;
+
+                if(RDNode.HasValue("cost"))
+                {
+                    try
+                    {
+                        cost += Convert.ToInt32(RDNode.GetValue("cost"));
+                    }
+                    catch (OverflowException)
+                    {
+                        Debug.Log("YT_TechTreeScenario.CalculateTechTreeStats(): ERROR OverflowException.  cost value is outside the range of Int32 type. " + RDNode.GetValue("cost"));
+                    }
+                    catch (FormatException)
+                    {
+                        Debug.Log("YT_TechTreeScenario.CalculateTechTreeStats(): ERROR FormatException.  cost value is not in a recognized format. " + RDNode.GetValue("cost"));
+                    }
+                }
+
+            }
+
+            treeData.totalCost = cost;
+            treeData.numNodes = numNodes;
         }
 
 

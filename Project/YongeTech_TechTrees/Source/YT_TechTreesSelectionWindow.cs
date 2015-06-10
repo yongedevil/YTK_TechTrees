@@ -13,25 +13,30 @@ namespace YongeTechKerbal
     \*======================================================*/
     class YT_TechTreesSelectionWindow
     {
+        private int windowX;
+        private int windowY;
         private int windowWidth;
         private int windowHeight;
 
         //Constants for placing elements in the window
         private const int SPACING_SECTION_HORIZONTAL = 12;
-        private const int SPACING_SECTION_VERTICAL = 24;
+        private const int SPACING_SECTION_VERTICAL = 8;
 
         private const int SPACING_BOARDER_RIGHT = 10;
         private const int SPACING_BOARDER_LEFT = 10;
         private const int SPACING_BOARDER_TOP = 25;
         private const int SPACING_BOARDER_BOTTOM = 10;
 
-        private const int LOGO_WIDTH = 128;
-        private const int LOGO_HEIGHT = 128;
+        private const int PORTRAIT_WIDTH = 128;
+        private const int PORTRAIT_HEIGHT = 128;
+        private const int PORTRAIT_NAME_HEIGHT = 40;
 
         private const int DROPDOWN_LINE = 30;
         private const int DROPDOWN_WIDTH = 350;
 
         private const int CONFERM_WIDTH = 200;
+
+        private const int STATS_WIDTH = 200;
 
 
         //Done is set to true when the user has clicked conferm
@@ -68,23 +73,33 @@ namespace YongeTechKerbal
         private string m_introText;
         private string m_confermButtonText;
 
+        //stores the kerbal portrait displayed in the window
+        private Texture m_portraitTexture;
+        private string m_portraitURL;
+        private string m_portraitName;
+
 
         //GUIStyles
         public GUIStyle WindowStyle { get { return m_windowStyle; } }
         private GUIStyle m_windowStyle;
 
         private GUIStyle m_textAreaStyle;
+        private GUIStyle m_textAreaBoxStyle;
         private GUIStyle m_confermButtonStyle;
         private GUIStyle m_dropdownButtonStyle;
         private GUIStyle m_dropdownBoxStyle;
         private GUIStyle m_dropdownListItemStyle;
+        private GUIStyle m_portraitStyle;
+        private GUIStyle m_portraitNameStyle;
 
         
         //Rects for elements in the window
         public Rect windowRect; //public so the class that created the window can access it.
-        private Rect m_logoRect;
+        private Rect m_portraitRect;
+        private Rect m_portraitNameRect;
         private Rect m_intoRect;
         private Rect m_treeDetailsRect;
+        private Rect m_treeStatsRect;
         private Rect m_dropdownRect;
         private Rect m_confermRect;
 
@@ -110,6 +125,10 @@ namespace YongeTechKerbal
             m_introText = null;
             m_confermButtonText = null;
 
+            m_portraitTexture = null;
+            m_portraitURL = null;
+            m_portraitName = null;
+
             m_techTrees = null;
             m_choiceIndex = 0;
 
@@ -119,6 +138,7 @@ namespace YongeTechKerbal
             //helper initialization functions
             InitializeStyles();
             InitializeRects();
+            InitializeTextures();
 
         }
 
@@ -150,6 +170,22 @@ namespace YongeTechKerbal
             m_textAreaStyle = new GUIStyle(HighLogic.Skin.textArea);
             m_textAreaStyle.normal.background = null;
             m_textAreaStyle.fontSize = 12;
+
+            m_textAreaBoxStyle = new GUIStyle(HighLogic.Skin.textArea);
+            m_textAreaStyle.border = new RectOffset(2, 2, 2, 2);
+            m_textAreaStyle.fontSize = 12;
+
+            m_portraitStyle = new GUIStyle(HighLogic.Skin.box);
+            m_portraitStyle.padding = new RectOffset(0, 0, 0, 0);
+            m_portraitStyle.normal.background = null;
+
+            m_portraitNameStyle = new GUIStyle(HighLogic.Skin.textArea);
+            m_portraitNameStyle.padding = new RectOffset(3, 3, 3, 3);
+            m_portraitNameStyle.normal.background = null;
+            m_portraitNameStyle.alignment = TextAnchor.UpperCenter;
+            m_portraitNameStyle.fontSize = 14;
+            m_portraitNameStyle.fontStyle = FontStyle.Bold;
+            m_portraitNameStyle.normal.textColor = new Color(194f / 255f, 255f / 255f, 0f / 255f);
         }
 
         /************************************************************************\
@@ -162,27 +198,40 @@ namespace YongeTechKerbal
         private void InitializeRects()
         {
             //Setup rectagles for main areas
-            windowRect = new Rect(Screen.width / 2 - windowWidth / 2, Screen.height / 2 - windowHeight / 2, windowWidth, windowHeight);
+            //windowRect = new Rect(Screen.width / 2 - windowWidth / 2, Screen.height / 2 - windowHeight / 2, windowWidth, windowHeight);
+            windowRect = new Rect(windowX, windowY, windowWidth, windowHeight);
 
-            //Logo and intro text areas up top
-            m_logoRect = new Rect(SPACING_BOARDER_LEFT, SPACING_BOARDER_TOP, LOGO_WIDTH, LOGO_HEIGHT);
+            //Portrait and intro text areas up top
+            m_portraitRect = new Rect(SPACING_BOARDER_LEFT, SPACING_BOARDER_TOP, PORTRAIT_WIDTH, PORTRAIT_HEIGHT);
+            m_portraitNameRect = new Rect(m_portraitRect);
+            m_portraitNameRect.y = m_portraitRect.y + m_portraitRect.height;
+            m_portraitNameRect.height = PORTRAIT_NAME_HEIGHT;
+
             m_intoRect = new Rect();
-            m_intoRect.x = m_logoRect.x + m_logoRect.width + SPACING_SECTION_HORIZONTAL;
-            m_intoRect.y = m_logoRect.y;
-            m_intoRect.width = windowWidth - (m_logoRect.x + m_logoRect.width + SPACING_SECTION_HORIZONTAL + SPACING_BOARDER_RIGHT);
-            m_intoRect.height = m_logoRect.height;
+            m_intoRect.x = m_portraitRect.x + m_portraitRect.width + SPACING_SECTION_HORIZONTAL;
+            m_intoRect.y = m_portraitRect.y;
+            m_intoRect.width = windowWidth - (m_portraitRect.x + m_portraitRect.width + SPACING_SECTION_HORIZONTAL + SPACING_BOARDER_RIGHT);
+            m_intoRect.height = m_portraitNameRect.yMax - m_portraitRect.yMin;
 
-            //Tree description area on the bottom
+            //Tree stats and description area on the bottom
+            m_treeStatsRect = new Rect();
+            m_treeStatsRect.x = windowRect.width - (SPACING_BOARDER_RIGHT + STATS_WIDTH);
+            m_treeStatsRect.y = m_intoRect.y + m_intoRect.height + SPACING_SECTION_VERTICAL * 2 + DROPDOWN_LINE;
+            m_treeStatsRect.width = STATS_WIDTH;
+            m_treeStatsRect.height = windowRect.height - (m_treeStatsRect.y + SPACING_BOARDER_BOTTOM);
+
             m_treeDetailsRect = new Rect();
             m_treeDetailsRect.x = SPACING_BOARDER_LEFT;
-            m_treeDetailsRect.y = m_logoRect.y + m_logoRect.height + SPACING_SECTION_VERTICAL * 2 + DROPDOWN_LINE;
-            m_treeDetailsRect.width = windowWidth - (SPACING_BOARDER_LEFT + SPACING_BOARDER_RIGHT);
-            m_treeDetailsRect.height = windowHeight - (m_treeDetailsRect.y + SPACING_BOARDER_BOTTOM);
+            m_treeDetailsRect.y = m_intoRect.y + m_intoRect.height + SPACING_SECTION_VERTICAL * 2 + DROPDOWN_LINE;
+            m_treeDetailsRect.width = windowRect.width - (SPACING_BOARDER_LEFT + SPACING_SECTION_HORIZONTAL + m_treeStatsRect.width + SPACING_BOARDER_RIGHT);
+            m_treeDetailsRect.height = windowRect.height - (m_treeDetailsRect.y + SPACING_BOARDER_BOTTOM);
+
+
 
             //Dropdown menu in the middle
             m_dropdownRect = new Rect();
             m_dropdownRect.x = SPACING_BOARDER_LEFT;
-            m_dropdownRect.y = m_logoRect.y + m_logoRect.height + SPACING_SECTION_VERTICAL;
+            m_dropdownRect.y = m_intoRect.y + m_intoRect.height + SPACING_SECTION_VERTICAL;
             m_dropdownRect.width = DROPDOWN_WIDTH;
             m_dropdownRect.height = 3 * DROPDOWN_LINE;
 
@@ -195,10 +244,25 @@ namespace YongeTechKerbal
 
             //Conferm button to the right of the dropdown
             m_confermRect = new Rect();
-            m_confermRect.x = windowWidth - (CONFERM_WIDTH + SPACING_BOARDER_RIGHT);
+            m_confermRect.x = windowRect.width - (CONFERM_WIDTH + SPACING_BOARDER_RIGHT);
             m_confermRect.y = m_dropdownRect.y;
             m_confermRect.width = CONFERM_WIDTH;
             m_confermRect.height = DROPDOWN_LINE;
+        }
+
+        /************************************************************************\
+         * YT_TechTreeSelectionWindow class                                     *
+         * InitializeTextures function                                          *
+         *                                                                      *
+         * Helper function for the constructor.                                 *
+         * Initializes the Textures used in this window.                        *
+        \************************************************************************/
+        private void InitializeTextures()
+        {
+            m_portraitTexture = GameDatabase.Instance.GetTextureInfo(m_portraitURL).texture;
+
+            if(null == m_portraitTexture)
+                Debug.Log("YT_TechTreeSelectionWindow.InitializeTextures(): ERROR portrait texture is null.  Attempted to load texture from " + m_portraitURL);
         }
 
 
@@ -217,6 +281,8 @@ namespace YongeTechKerbal
             KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesSelectionWindow>();
 
             configFile.load();
+            windowX = configFile.GetValue<int>("window_x");
+            windowY = configFile.GetValue<int>("window_y");
             windowWidth = configFile.GetValue<int>("window_width");
             windowHeight = configFile.GetValue<int>("window_height");
             m_dropdownMaxSize = configFile.GetValue<int>("dropdown_maxSize");
@@ -224,13 +290,22 @@ namespace YongeTechKerbal
             m_windowTitle = configFile.GetValue<string>("window_title");
             m_introText = configFile.GetValue<string>("intro_text");
             m_confermButtonText = configFile.GetValue<string>("conferm_text");
+
+            m_portraitURL = configFile.GetValue<string>("portrait_textureUrl");
+            m_portraitName = configFile.GetValue<string>("portrait_name");
+
 #if DEBUG
-            string values = "windowWidth = " + windowWidth + "\n";
+            string values = "";
+            values += "windowX = " + windowX + "\n";
+            values += "windowY = " + windowY + "\n";
+            values += "windowWidth = " + windowWidth + "\n";
             values += "windowHeight = " + windowHeight + "\n";
             values += "m_dropdownMaxSize = " + m_dropdownMaxSize + "\n";
             values += "m_windowTitle = " + m_windowTitle + "\n";
             values += "m_introText = " + m_introText + "\n";
             values += "m_confermButtonText = " + m_confermButtonText + "\n";
+            values += "m_portraitURL = " + m_portraitURL + "\n";
+            values += "m_portraitName = " + m_portraitName + "\n";
             Debug.Log("YT_TechTreeSelectionWindow.ReadConfigFile(): values\n" + values);
 #endif
         }
@@ -253,7 +328,6 @@ namespace YongeTechKerbal
             DrawConferm();
 
             GUI.DragWindow(new Rect(0, 0, windowWidth, windowHeight));
-
         }
 
 
@@ -269,7 +343,13 @@ namespace YongeTechKerbal
 #if DEBUG_UPDATE
             Debug.Log("YT_TechTreeSelectionWindow.DrawHead()");
 #endif
-            GUI.Box(m_logoRect, GameDatabase.Instance.GetTextureInfo(HighLogic.CurrentGame.flagURL).texture);
+            if (null != m_portraitTexture)
+            {
+                GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(m_portraitURL).texture, m_portraitStyle);
+                GUI.Box(m_portraitNameRect, m_portraitName, m_portraitNameStyle);
+            }
+            else
+                GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(HighLogic.CurrentGame.flagURL).texture, m_portraitStyle);
 
             GUI.Box(m_intoRect, m_introText, m_textAreaStyle);
         }
@@ -287,6 +367,8 @@ namespace YongeTechKerbal
             Debug.Log("YT_TechTreeSelectionWindow.DrawTreeDetails()");
 #endif
             GUI.Box(m_treeDetailsRect, m_techTrees[m_choiceIndex].desctription, m_textAreaStyle);
+
+            GUI.Box(m_treeStatsRect, "Tree Stats:\n\nTotal Cost: " + m_techTrees[m_choiceIndex].totalCost + "\nTotal Nodes: " + m_techTrees[m_choiceIndex].numNodes, m_textAreaBoxStyle);
         }
 
         /************************************************************************\
