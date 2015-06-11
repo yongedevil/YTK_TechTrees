@@ -11,7 +11,7 @@ namespace YongeTechKerbal
      * Class to handle drawing the tree selection window    *
      * to let the player select a tree to play with.        *
     \*======================================================*/
-    class YT_TechTreesSelectionWindow
+    class YT_TechTreeSelectionWindow
     {
         private int windowX;
         private int windowY;
@@ -83,7 +83,6 @@ namespace YongeTechKerbal
         //GUIStyles
         public GUIStyle WindowStyle { get { return m_windowStyle; } }
         private GUIStyle m_windowStyle;
-
         private GUIStyle m_textAreaStyle;
         private GUIStyle m_textAreaBoxStyle;
         private GUIStyle m_textAreaHeaderStyle;
@@ -92,7 +91,6 @@ namespace YongeTechKerbal
         private GUIStyle m_dropdownBoxStyle;
         private GUIStyle m_dropdownListItemStyle;
         private GUIStyle m_portraitStyle;
-        private GUIStyle m_portraitNameStyle;
 
         
         //Rects for elements in the window
@@ -116,7 +114,7 @@ namespace YongeTechKerbal
          * Constructor                                                          *
          *                                                                      *
         \************************************************************************/
-        public YT_TechTreesSelectionWindow()
+        public YT_TechTreeSelectionWindow()
         {
             //initialize variables
             m_done = false;
@@ -188,8 +186,6 @@ namespace YongeTechKerbal
             m_portraitStyle = new GUIStyle(HighLogic.Skin.box);
             m_portraitStyle.padding = new RectOffset(0, 0, 0, 0);
             m_portraitStyle.normal.background = null;
-
-            m_portraitNameStyle = new GUIStyle(m_textAreaHeaderStyle);
         }
 
         /************************************************************************\
@@ -202,6 +198,7 @@ namespace YongeTechKerbal
         private void InitializeRects()
         {
             //Setup rectagles for main areas
+            //old code for centring the window
             //windowRect = new Rect(Screen.width / 2 - windowWidth / 2, Screen.height / 2 - windowHeight / 2, windowWidth, windowHeight);
             windowRect = new Rect(windowX, windowY, windowWidth, windowHeight);
 
@@ -288,7 +285,7 @@ namespace YongeTechKerbal
 #if DEBUG
             Debug.Log("YT_TechTreeSelectionWindow.ReadConfigFile()");
 #endif
-            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesSelectionWindow>();
+            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreeSelectionWindow>();
 
             configFile.load();
             windowX = configFile.GetValue<int>("window_x");
@@ -356,7 +353,7 @@ namespace YongeTechKerbal
             if (null != m_portraitTexture)
             {
                 GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(m_portraitURL).texture, m_portraitStyle);
-                GUI.Box(m_portraitNameRect, m_portraitName, m_portraitNameStyle);
+                GUI.Box(m_portraitNameRect, m_portraitName, m_textAreaHeaderStyle);
             }
             else
                 GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(HighLogic.CurrentGame.flagURL).texture, m_portraitStyle);

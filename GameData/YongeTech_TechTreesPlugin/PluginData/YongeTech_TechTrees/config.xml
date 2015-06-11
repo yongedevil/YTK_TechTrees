@@ -5,25 +5,18 @@
     <int name="window_width">600</int>
     <int name="window_height">350</int>
 	<int name="dropdown_maxSize">4</int>
+	
     <string name="window_title">Select Tech Tree</string>
     <string name="intro_text">Greetings, I'm Wernher Von Kerman in charge of Research and Development here at KSC.  At R&amp;D we take the science you collect and use it to develop new parts for you to blow up.
 
 Before we get started though, you have the YongeTech Tech Trees mod installed which allow us to select the technology tree we want to research for this space program.  You should pick one of the trees from the list below and we will load it up in the Research and Development Complex for you.</string>
 	<string name="conferm_text">I've picked the tree I want</string>
 	
-	<bool name="buyStartParts">1</bool>
-	<string name="YT_techTreeScenarioNode_treeSelectedField">treeSelected</string>
-	
 	<string name="stockTree_url">GameData/Squad/Resources/TechTree.cfg</string>
 	<string name="stockTree_title">Stock Tree</string>
 	<string name="stockTree_description">Default tech tree for Kerbal Space Program.</string>
 	
-	<string name="TechTree_titleField">title</string>
-	<string name="TechTree_descriptionField">description</string>
-	
 	<string name="RDNode_startID">start</string>
-	<string name="RDNode_unlocksNode_nodeType">Unlocks</string>
-	<string name="RDNode_unlocksNode_partField">part</string>
 	
 	<string name="portrait_textureUrl">YongeTech_TechTreesPlugin/Textures/WernherVonKerman</string>
 	<string name="portrait_name">Wernher Von Kerman</string>
