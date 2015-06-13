@@ -1,5 +1,5 @@
 YongeTech Tech Trees Plugin
-version: 1.0
+version: 1.0.1
 author: yongedevil  
 ============================
 
@@ -21,7 +21,7 @@ Contents
 ----------------
 By itself this mod doesn’t change the technology tree in Kerbal Space Program.  Its intent is to make it easier for others to create custom tech trees.
   - Allows part unlocks to be listed in the TechTree ConfigNode rather than having to edit every Part ConfigNode.
-  - Adds support for using custom textures to create icons for the tech tree
+  - Adds support for using custom textures to create icons for the tech tree.
   - Adds a tree selection window to let the player select a tree for each new game.
 
 

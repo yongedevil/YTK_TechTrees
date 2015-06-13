@@ -1,3 +1,6 @@
+v1.0.1
+- Fixed spelling mistake with Teir in selection window stats
+
 v1.0
 - Added support for Unlocks node in the RDNode.  Parts listed in Unlocks will be modified to require the parent RDNode when the TechTree is active.
 - Added tech tree selection window for new games.
