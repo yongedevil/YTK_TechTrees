@@ -29,12 +29,12 @@ namespace YongeTechKerbal
 
 
     /*======================================================*\
-     * YT_TechTreeSelectionScenario class                   *
+     * YT_TechTreeExpansionScenario class                   *
      * ScenarioModule to handle seting up the tech tree for *
      * each game.                                           *
     \*======================================================*/
     [KSPScenario(ScenarioCreationOptions.AddToNewScienceSandboxGames | ScenarioCreationOptions.AddToNewCareerGames, GameScenes.SPACECENTER)]
-    public class YT_TechTreeSelectionScenario : ScenarioModule
+    public class YT_TechTreeExpansionScenario : ScenarioModule
     {
         //Stock Tree information
         private string stockTree_url;
@@ -67,14 +67,14 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * OnAwake function                                                     *
          *                                                                      *
         \************************************************************************/
         public override void OnAwake()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.OnAwake()");
+            Debug.Log("YT_TechTreeExpansionScenario.OnAwake()");
 #endif
             RDNode_startID = null;
 
@@ -85,14 +85,14 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * OnLoad function                                                      *
          *                                                                      *
         \************************************************************************/
         public override void OnLoad(ConfigNode node)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.OnLoad()");
+            Debug.Log("YT_TechTreeExpansionScenario.OnLoad()");
 #endif
             base.OnLoad(node);
 
@@ -111,14 +111,14 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * OnSave function                                                      *
          *                                                                      *
         \************************************************************************/
         public override void OnSave(ConfigNode node)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.OnSave()");
+            Debug.Log("YT_TechTreeExpansionScenario.OnSave()");
 #endif
             base.OnSave(node);
 
@@ -128,14 +128,14 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * Start function                                                       *
          *                                                                      *
         \************************************************************************/
         public void Start()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.Start()");
+            Debug.Log("YT_TechTreeExpansionScenario.Start()");
 #endif
             //Check that the game mode is Career or Science
             if (Game.Modes.CAREER == HighLogic.CurrentGame.Mode || Game.Modes.SCIENCE_SANDBOX == HighLogic.CurrentGame.Mode)
@@ -159,7 +159,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * ReadConfigFile function                                              *
          *                                                                      *
          * Reads settings in from the mod's configuration file.                 *
@@ -167,10 +167,10 @@ namespace YongeTechKerbal
         private void ReadConfigFile()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.ReadConfigFile()");
+            Debug.Log("YT_TechTreeExpansionScenario.ReadConfigFile()");
 #endif
             //Read Mod Configuration File
-            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreeSelectionScenario>();
+            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreeExpansionScenario>();
             configFile.load();
 
             stockTree_url = configFile.GetValue<string>("stockTree_url");
@@ -184,13 +184,13 @@ namespace YongeTechKerbal
             values += "stockTree_title = " + stockTree_title + "\n";
             values += "stockTree_description = " + stockTree_description + "\n";
             values += "RDNode_startID = " + RDNode_startID + "\n";
-            Debug.Log("YT_TechTreeSelectionScenario.ReadConfigFile(): values\n" + values);
+            Debug.Log("YT_TechTreeExpansionScenario.ReadConfigFile(): values\n" + values);
 #endif
         }
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * LoadTechTreeData function                                            *
          *                                                                      *
          * Finds TechTree ConfigNodes in the GameDatabase and sets up           *
@@ -199,7 +199,7 @@ namespace YongeTechKerbal
         private void LoadTechTreeData()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.LoadModData()");
+            Debug.Log("YT_TechTreeExpansionScenario.LoadModData()");
 #endif
             ConfigNode node;
             string title;
@@ -212,7 +212,7 @@ namespace YongeTechKerbal
                 if ("TechTree" == config.name)
                 {
 #if DEBUG
-                    Debug.Log("YT_TechTreeSelectionScenario.LoadModData(): found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
+                    Debug.Log("YT_TechTreeExpansionScenario.LoadModData(): found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
 #endif
                     node = config.config;
                     url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
@@ -251,7 +251,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * CalculateTechTreeStats function                                      *
          *                                                                      *
          * Calculates the stats for the given tech tree.                        *
@@ -308,11 +308,11 @@ namespace YongeTechKerbal
                         }
                         catch (OverflowException)
                         {
-                            Debug.Log("YT_TechTreeSelectionScenario.CalculateTechTreeStats(): ERROR OverflowException.  cost value is outside the range of Int32 type. " + RDNode.GetValue("cost"));
+                            Debug.Log("YT_TechTreeExpansionScenario.CalculateTechTreeStats(): ERROR OverflowException.  cost value is outside the range of Int32 type. " + RDNode.GetValue("cost"));
                         }
                         catch (FormatException)
                         {
-                            Debug.Log("YT_TechTreeSelectionScenario.CalculateTechTreeStats(): ERROR FormatException.  cost value is not in a recognized format. " + RDNode.GetValue("cost"));
+                            Debug.Log("YT_TechTreeExpansionScenario.CalculateTechTreeStats(): ERROR FormatException.  cost value is not in a recognized format. " + RDNode.GetValue("cost"));
                         }
                     }
                 }
@@ -326,14 +326,14 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * OnGUI function                                                       *
          *                                                                      *
         \************************************************************************/
         public void OnGUI()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreeSelectionScenario.OnGUI()");
+            Debug.Log("YT_TechTreeExpansionScenario.OnGUI()");
 #endif
             if (!m_treeSelected && null != m_selectionWindow)
             {
@@ -345,7 +345,7 @@ namespace YongeTechKerbal
                 {
                     ChangeTree(m_selectionWindow.TechTreeURL);
 #if DEBUG
-                    Debug.Log("YT_TechTreeSelectionScenario.OnGUI(): changing tech tree to " + m_selectionWindow.TechTreeURL);
+                    Debug.Log("YT_TechTreeExpansionScenario.OnGUI(): changing tech tree to " + m_selectionWindow.TechTreeURL);
 #endif
                     //No longer need the selection window
                     m_selectionWindow = null;
@@ -355,7 +355,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * ChangeTree function                                                  *
          *                                                                      *
          * Handles changing the active techTree to the one at treeURL.          *
@@ -363,7 +363,7 @@ namespace YongeTechKerbal
         private void ChangeTree(string treeURL)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.ChangeTree(" + treeURL + ")");
+            Debug.Log("YT_TechTreeExpansionScenario.ChangeTree(" + treeURL + ")");
 #endif
             ConfigNode techtreeNode = null;
             ConfigNode RDScenarioNode = null;
@@ -381,7 +381,7 @@ namespace YongeTechKerbal
                     \****************************************************/
                     if (null == (RDScenario = scenarioModule.moduleRef as ResearchAndDevelopment))
                     {
-                        Debug.Log("YT_TechTreeSelectionScenario.ChangeTree(): ERROR unable to load ResearchAndDevelopment ScenarioModule");
+                        Debug.Log("YT_TechTreeExpansionScenario.ChangeTree(): ERROR unable to load ResearchAndDevelopment ScenarioModule");
                     }
                     break;
                 }
@@ -393,7 +393,7 @@ namespace YongeTechKerbal
             \********************************************/
             if (null == (techtreeNode = ConfigNode.Load(treeURL).GetNode("TechTree")))
             {
-                Debug.Log("YT_TechTreeSelectionScenario.ChangeTree(): ERROR TechTree node not loaded from url " + treeURL);
+                Debug.Log("YT_TechTreeExpansionScenario.ChangeTree(): ERROR TechTree node not loaded from url " + treeURL);
                 return;
             }
 
@@ -404,7 +404,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * ApplyTechTreeChanges function                                        *
          *                                                                      *
          * Applies changes to the tech tree.                                    *
@@ -412,7 +412,7 @@ namespace YongeTechKerbal
         private void ApplyTechTreeChanges(ConfigNode techtreeNode, ResearchAndDevelopment RDScenario)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.ApplyTechTreeChanges()");
+            Debug.Log("YT_TechTreeExpansionScenario.ApplyTechTreeChanges()");
 #endif
             string techID = null;
             List<string> partNamesList = new List<string>();
@@ -422,12 +422,12 @@ namespace YongeTechKerbal
             \************************************/
             if(null == techtreeNode)
             {
-                Debug.Log("YT_TechTreeSelectionScenario.ApplyTechTreeChanges(): ERROR techtreeNode node is null");
+                Debug.Log("YT_TechTreeExpansionScenario.ApplyTechTreeChanges(): ERROR techtreeNode node is null");
                 return;
             }
             if(null == RDScenario)
             {
-                Debug.Log("YT_TechTreeSelectionScenario.ApplyTechTreeChanges(): ERROR RDScenario scenario is null");
+                Debug.Log("YT_TechTreeExpansionScenario.ApplyTechTreeChanges(): ERROR RDScenario scenario is null");
                 return;
             }
 
@@ -444,11 +444,11 @@ namespace YongeTechKerbal
                 \****************************/
                 if (null == (techID = RDNode.GetValue("id")))
                 {
-                    Debug.Log("YT_TechTreeSelectionScenario.ApplyTechTreeChanges(): ERROR techID not found for RDNode. Node:\n" + RDNode.ToString());
+                    Debug.Log("YT_TechTreeExpansionScenario.ApplyTechTreeChanges(): ERROR techID not found for RDNode. Node:\n" + RDNode.ToString());
                     continue;
                 }
 #if DEBUG
-                Debug.Log("YT_TechTreeSelectionScenario.ApplyTechTreeChanges(): working on node " + techID);
+                Debug.Log("YT_TechTreeExpansionScenario.ApplyTechTreeChanges(): working on node " + techID);
 #endif
 
                 //Create list of parts unlocked by this technode (the Parts subnode is a custom addition to the RDNode)
@@ -467,7 +467,7 @@ namespace YongeTechKerbal
                 \****************************/
                 if (null == (techID = RDNode.GetValue("id")))
                 {
-                    Debug.Log("YT_TechTreeSelectionScenario.ApplyTechTreeChanges(): ERROR techID not found for RDNode. Node:\n" + RDNode.ToString());
+                    Debug.Log("YT_TechTreeExpansionScenario.ApplyTechTreeChanges(): ERROR techID not found for RDNode. Node:\n" + RDNode.ToString());
                     continue;
                 }
 
@@ -489,7 +489,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * GetCurrentGameTechTreeUrl function                                   *
          *                                                                      *
          * Gets the TechTreeUrl from the Current Game.                          *
@@ -500,7 +500,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * SetCurrentGameTechTreeUrl function                                   *
          *                                                                      *
          * Sets the TechTreeUrl from the Current Game.                          *
@@ -512,7 +512,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * ResetTechRequired function                                           *
          *                                                                      *
          * Resets TechRequired for all parts to their defaults.                 *
@@ -525,7 +525,7 @@ namespace YongeTechKerbal
             foreach (AvailablePart part in PartLoader.LoadedPartsList)
             {
 #if DEBUG
-                Debug.Log("YT_TechTreeSelectionScenario.ResetTechRequired(): looking at: " + part.name);
+                Debug.Log("YT_TechTreeExpansionScenario.ResetTechRequired(): looking at: " + part.name);
 #endif
                 /************************************************************\
                  * Get the full path to the origonal config file            * 
@@ -537,18 +537,18 @@ namespace YongeTechKerbal
                 {
 #if DEBUG
                     //some parts such as kerbalEVA have no config file, so this is not necessarily an error.
-                    Debug.Log("YT_TechTreeSelectionScenario.ResetTechRequired(): part.partUrlConfig.parent.fullPath is null for " + part.name);
+                    Debug.Log("YT_TechTreeExpansionScenario.ResetTechRequired(): part.partUrlConfig.parent.fullPath is null for " + part.name);
 #endif
                     continue;
                 }
                 if(null == (node = ConfigNode.Load(part.partUrlConfig.parent.fullPath)))
                 {
-                    Debug.Log("YT_TechTreeSelectionScenario.ResetTechRequired(): ERROR unable to load ConfigNode for " + part.name + ".  from file: " + part.partUrlConfig.parent.fullPath);
+                    Debug.Log("YT_TechTreeExpansionScenario.ResetTechRequired(): ERROR unable to load ConfigNode for " + part.name + ".  from file: " + part.partUrlConfig.parent.fullPath);
                     continue;
                 }
                 if(null == (node = node.GetNode("PART")) || null == (techID = node.GetValue("TechRequired")) )
                 {
-                    Debug.Log("YT_TechTreeSelectionScenario.ResetTechRequired(): ERROR can't find TechRequired in ConfigNode for " + part.name + ". Node:\n" + node.ToString());
+                    Debug.Log("YT_TechTreeExpansionScenario.ResetTechRequired(): ERROR can't find TechRequired in ConfigNode for " + part.name + ". Node:\n" + node.ToString());
                     continue;
                 }
 
@@ -559,7 +559,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * GeneratePartNamesList function                                       *
          *                                                                      *
          * Returns a list of part names for parts unlocked by the given RDNode. *
@@ -567,7 +567,7 @@ namespace YongeTechKerbal
         private List<string> GeneratePartNamesList(ConfigNode RDNode)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.GeneratePartNamesList()");
+            Debug.Log("YT_TechTreeExpansionScenario.GeneratePartNamesList()");
 #endif
             List<string> partNamesList = new List<string>();
             ConfigNode partsNode = null;
@@ -583,7 +583,7 @@ namespace YongeTechKerbal
             string partNames = "";
             foreach (string partName in partNamesList)
                 partNames += partName + "\n";
-            Debug.Log("YT_TechTreeSelectionScenario.GeneratePartNamesList(): generated partNamesList for " + RDNode.GetValue("id") + ":\n" + partNames);
+            Debug.Log("YT_TechTreeExpansionScenario.GeneratePartNamesList(): generated partNamesList for " + RDNode.GetValue("id") + ":\n" + partNames);
 #endif
 
             return partNamesList;
@@ -591,7 +591,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * CleanUpRDScenario function                                           *
          *                                                                      *
          * Removes the parts in partNamesList from Tech nodes in RDScenarioNode *
@@ -600,7 +600,7 @@ namespace YongeTechKerbal
         private void CleanUpRDScenario(ResearchAndDevelopment RDScenario, string techID)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.CleanUpRDScenario()");
+            Debug.Log("YT_TechTreeExpansionScenario.CleanUpRDScenario()");
 #endif
             ProtoTechNode tech = null;
 
@@ -608,7 +608,7 @@ namespace YongeTechKerbal
             if (null == (tech = RDScenario.GetTechState(techID)))
             {
 #if DEBUG
-                Debug.Log("YT_TechTreeSelectionScenario.CleanUpRDScenario(): no data found for tech " + techID + " in the ResearchAndDevelopment Scenario");
+                Debug.Log("YT_TechTreeExpansionScenario.CleanUpRDScenario(): no data found for tech " + techID + " in the ResearchAndDevelopment Scenario");
 #endif
                 return;
             }
@@ -619,7 +619,7 @@ namespace YongeTechKerbal
                 if (tech.partsPurchased[i].TechRequired != techID)
                 {
 #if DEBUG
-                    Debug.Log("YT_TechTreeSelectionScenario.CleanUpRDScenario(): Removing value for " + tech.partsPurchased[i].title + " from ResearchAndDevelopment Scenario for " + techID);
+                    Debug.Log("YT_TechTreeExpansionScenario.CleanUpRDScenario(): Removing value for " + tech.partsPurchased[i].title + " from ResearchAndDevelopment Scenario for " + techID);
 #endif
                     tech.partsPurchased.Remove(tech.partsPurchased[i]);
                 }
@@ -630,7 +630,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * BuyAllParts function                                                 *
          *                                                                      *
          * Adds all parts in techID to the purchased list in RDScenario if the  *
@@ -639,7 +639,7 @@ namespace YongeTechKerbal
         private void BuyAllParts(List<string> partNamesList, ResearchAndDevelopment RDScenario, string techID)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.BuyAllParts()");
+            Debug.Log("YT_TechTreeExpansionScenario.BuyAllParts()");
 #endif
             ProtoTechNode tech = null;
             AvailablePart avalablePart = null;
@@ -649,7 +649,7 @@ namespace YongeTechKerbal
             if (null == (tech = RDScenario.GetTechState(techID)))
             {
 #if DEBUG
-                Debug.Log("YT_TechTreeSelectionScenario.BuyAllParts(): no data found for tech " + techID + " in the ResearchAndDevelopment Scenario");
+                Debug.Log("YT_TechTreeExpansionScenario.BuyAllParts(): no data found for tech " + techID + " in the ResearchAndDevelopment Scenario");
 #endif
                 return;
             }
@@ -663,7 +663,7 @@ namespace YongeTechKerbal
                 \********************************/
                 if (null == (avalablePart = PartLoader.getPartInfoByName(partName)))
                 {
-                    Debug.Log("YT_TechTreeSelectionScenario.BuyAllParts(): WARNING part " + partName + " not found in PartLoader.");
+                    Debug.Log("YT_TechTreeExpansionScenario.BuyAllParts(): WARNING part " + partName + " not found in PartLoader.");
                     continue;
                 }
 
@@ -671,7 +671,7 @@ namespace YongeTechKerbal
                 if(!tech.partsPurchased.Contains(avalablePart))
                 {
 #if DEBUG
-                    Debug.Log("YT_TechTreeSelectionScenario.BuyAllParts(): techID does not have " + avalablePart.title + " adding it");
+                    Debug.Log("YT_TechTreeExpansionScenario.BuyAllParts(): techID does not have " + avalablePart.title + " adding it");
 #endif
                     tech.partsPurchased.Add(avalablePart);
                 }
@@ -680,7 +680,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionScenario class                                   *
+         * YT_TechTreeExpansionScenario class                                   *
          * ChangeTechRequired function                                          *
          *                                                                      *
          * Edits the TechRequired for the parts in partNamesList to be techID.  *
@@ -688,7 +688,7 @@ namespace YongeTechKerbal
         private void ChangeTechRequired(List<string> partNamesList, string techID)
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionScenario.ChangeTechRequired()");
+            Debug.Log("YT_TechTreeExpansionScenario.ChangeTechRequired()");
 #endif
             AvailablePart avalablePart = null;
 
@@ -700,11 +700,11 @@ namespace YongeTechKerbal
                 \********************************/
                 if (null == (avalablePart = PartLoader.getPartInfoByName(partName)))
                 {
-                    Debug.Log("YT_TechTreeSelectionScenario.ChangeTechRequired(): WARNING part " + partName + " not found in PartLoader.");
+                    Debug.Log("YT_TechTreeExpansionScenario.ChangeTechRequired(): WARNING part " + partName + " not found in PartLoader.");
                     continue;
                 }
 #if DEBUG
-                Debug.Log("YT_TechTreeSelectionScenario.ChangeTechRequired(): edditing " + partName + " to require " + techID);
+                Debug.Log("YT_TechTreeExpansionScenario.ChangeTechRequired(): edditing " + partName + " to require " + techID);
 #endif
                 avalablePart.TechRequired = techID;
             }

@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_RDIconLoader", "YongeTech_RDIconLoader\YongeTech_RDIconLoader.csproj", "{EC799420-18B1-4117-A15B-8D440C9679D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_TechTreeSelection", "YongeTech_TechTreeSelection\YongeTech_TechTreeSelection.csproj", "{47E494A6-871D-4F44-83DB-08312D4C6E29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_TechTreeExpansion", "YongeTech_TechTreeExpansion\YongeTech_TechTreeExpansion.csproj", "{47E494A6-871D-4F44-83DB-08312D4C6E29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
