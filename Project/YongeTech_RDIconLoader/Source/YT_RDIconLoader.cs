@@ -67,8 +67,14 @@ namespace YongeTechKerbal
                     //add info for these files to m_iconDataList
                     foreach (UrlDir.UrlFile file in dir.files)
                     {
-                        if("png" == file.fileExtension)
+#if DEBUG
+                        Debug.Log("YT_RDIconLoader.Start(): looking at file " + file.name + "." + file.fileExtension);
+#endif
+                        if ("png" == file.fileExtension || "jpg" == file.fileExtension || "gif" == file.fileExtension || "bmp" == file.fileExtension || "tga" == file.fileExtension)
                         {
+#if DEBUG
+                            Debug.Log("YT_RDIconLoader.Start(): adding file to iconDataList");
+#endif
                             m_iconDataList.Add(new YT_IconData(file.name, file.url));
                         }
                     }
@@ -141,6 +147,9 @@ namespace YongeTechKerbal
 
             foreach(YT_IconData iconData in m_iconDataList)
             {
+#if DEBUG
+                Debug.Log("YT_RDIconLoader.LoadIcons(): loading " + iconData.name);
+#endif
                 customIcon = new Icon("", GameDatabase.Instance.GetTextureInfo(iconData.textureURL).texture);
                 RDController.Instance.iconLoader.iconDictionary.Add(iconData.name, customIcon);
             }

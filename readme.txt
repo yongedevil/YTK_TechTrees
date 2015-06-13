@@ -1,4 +1,4 @@
-YongeTech Tech Tree Selection
+YongeTech Tech Tree Plugin
 version: 1.0
 author: yongedevil  
 ============================
