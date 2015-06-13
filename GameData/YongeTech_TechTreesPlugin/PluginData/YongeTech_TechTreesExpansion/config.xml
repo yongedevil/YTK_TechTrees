@@ -3,7 +3,7 @@
     <int name="window_x">475</int>
     <int name="window_y">50</int>
     <int name="window_width">600</int>
-    <int name="window_height">350</int>
+    <int name="window_height">360</int>
 	<int name="dropdown_maxSize">4</int>
 	
     <string name="window_title">Select Tech Tree</string>
@@ -16,7 +16,8 @@ Before we get started though, you have the YongeTech Tech Trees mod installed wh
 	<string name="stockTree_title">Stock Tree</string>
 	<string name="stockTree_description">Default tech tree for Kerbal Space Program.</string>
 	
-	<string name="RDNode_startID">start</string>
+	<int name="RDNode_maxCost_level1">100</int>
+	<int name="RDNode_maxCost_level2">500</int>
 	
 	<string name="portrait_textureUrl">YongeTech_TechTreesPlugin/Textures/WernherVonKerman</string>
 	<string name="portrait_name">Wernher Von Kerman</string>

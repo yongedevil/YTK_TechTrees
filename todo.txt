@@ -1,6 +1,1 @@
-Support for more icon image formats
-See how the icon loader handles characters such as '_', '.' and ' '
-
-See if the game defines start node as one with a cost of 0, add support for multiple start nodes
-
-Find word and character limits to fields in the Tree Selection Window
+Fix conflix with ModuleManager

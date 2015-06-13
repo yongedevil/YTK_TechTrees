@@ -70,7 +70,7 @@ namespace YongeTechKerbal
 #if DEBUG
                         Debug.Log("YT_RDIconLoader.Start(): looking at file " + file.name + "." + file.fileExtension);
 #endif
-                        if ("png" == file.fileExtension || "jpg" == file.fileExtension || "gif" == file.fileExtension || "bmp" == file.fileExtension || "tga" == file.fileExtension)
+                        if ("png" == file.fileExtension || "tga" == file.fileExtension)
                         {
 #if DEBUG
                             Debug.Log("YT_RDIconLoader.Start(): adding file to iconDataList");

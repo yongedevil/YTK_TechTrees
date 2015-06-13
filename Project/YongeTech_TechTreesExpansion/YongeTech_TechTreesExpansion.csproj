@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>YongeTechKerbal</RootNamespace>
-    <AssemblyName>YongeTech_TechTreePlugin</AssemblyName>
+    <AssemblyName>YongeTech_TechTreesExpansion</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,8 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\YT_TechTreePluginScenario.cs" />
-    <Compile Include="Source\YT_TechTreeSelectionWindow.cs" />
+    <Compile Include="Source\ConfigNodeParseHelper.cs" />
+    <Compile Include="Source\YT_TechTreesScenario.cs" />
+    <Compile Include="Source\YT_TechTreesSelectionWindow.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

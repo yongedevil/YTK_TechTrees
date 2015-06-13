@@ -7,11 +7,11 @@ using KSP;
 namespace YongeTechKerbal
 {
     /*======================================================*\
-     * YT_TechTreeSelectionWindow class                     *
+     * YT_TechTreesSelectionWindow class                    *
      * Class to handle drawing the tree selection window    *
      * to let the player select a tree to play with.        *
     \*======================================================*/
-    class YT_TechTreeSelectionWindow
+    class YT_TechTreesSelectionWindow
     {
         private int windowX;
         private int windowY;
@@ -110,11 +110,11 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * Constructor                                                          *
          *                                                                      *
         \************************************************************************/
-        public YT_TechTreeSelectionWindow()
+        public YT_TechTreesSelectionWindow()
         {
             //initialize variables
             m_done = false;
@@ -144,7 +144,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * InitializeStyles function                                            *
          *                                                                      *
          * Helper function for the constructor.                                 *
@@ -189,7 +189,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * InitializeRects function                                             *
          *                                                                      *
          * Helper function for the constructor.                                 *
@@ -231,7 +231,7 @@ namespace YongeTechKerbal
             m_treeDetailsRect.x = SPACING_BOARDER_LEFT;
             m_treeDetailsRect.y = m_intoRect.y + m_intoRect.height + SPACING_SECTION_VERTICAL * 2 + DROPDOWN_LINE;
             m_treeDetailsRect.width = windowRect.width - (SPACING_BOARDER_LEFT + SPACING_SECTION_HORIZONTAL + m_treeStatsRect.width + SPACING_BOARDER_RIGHT);
-            m_treeDetailsRect.height = windowRect.height - (m_treeDetailsRect.y + SPACING_BOARDER_BOTTOM);
+            m_treeDetailsRect.height = windowRect.height - (m_treeDetailsRect.y);
 
 
 
@@ -258,7 +258,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * InitializeTextures function                                          *
          *                                                                      *
          * Helper function for the constructor.                                 *
@@ -266,15 +266,20 @@ namespace YongeTechKerbal
         \************************************************************************/
         private void InitializeTextures()
         {
-            m_portraitTexture = GameDatabase.Instance.GetTextureInfo(m_portraitURL).texture;
+            GameDatabase.TextureInfo texInfo = GameDatabase.Instance.GetTextureInfo(m_portraitURL);
 
-            if(null == m_portraitTexture)
-                Debug.Log("YT_TechTreeSelectionWindow.InitializeTextures(): ERROR portrait texture is null.  Attempted to load texture from " + m_portraitURL);
+            if (null == texInfo)
+            {
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load portrait texture from " + m_portraitURL);
+                return;
+            }
+
+            m_portraitTexture = GameDatabase.Instance.GetTextureInfo(m_portraitURL).texture;
         }
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * LoadConfigFile function                                              *
          *                                                                      *
          * Helper function for the constructor.                                 *
@@ -283,9 +288,9 @@ namespace YongeTechKerbal
         private void ReadConfigFile()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreeSelectionWindow.ReadConfigFile()");
+            Debug.Log("YT_TechTreesSelectionWindow.ReadConfigFile()");
 #endif
-            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreeSelectionWindow>();
+            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesSelectionWindow>();
 
             configFile.load();
             windowX = configFile.GetValue<int>("window_x");
@@ -313,20 +318,20 @@ namespace YongeTechKerbal
             values += "m_confermButtonText = " + m_confermButtonText + "\n";
             values += "m_portraitURL = " + m_portraitURL + "\n";
             values += "m_portraitName = " + m_portraitName + "\n";
-            Debug.Log("YT_TechTreeSelectionWindow.ReadConfigFile(): values\n" + values);
+            Debug.Log("YT_TechTreesSelectionWindow.ReadConfigFile(): values\n" + values);
 #endif
         }
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * DrawWindow function                                                  *
          *                                                                      *
         \************************************************************************/
         public void DrawWindow(int id)
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreeSelectionWindow.DrawWindow()");
+            Debug.Log("YT_TechTreesSelectionWindow.DrawWindow()");
 #endif
             DrawHead();
             DrawTreeDetails();
@@ -339,7 +344,7 @@ namespace YongeTechKerbal
 
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * DrawHead function                                                    *
          *                                                                      *
          * Helper function for DrawWindow.                                      *
@@ -348,7 +353,7 @@ namespace YongeTechKerbal
         private void DrawHead()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreeSelectionWindow.DrawHead()");
+            Debug.Log("YT_TechTreesSelectionWindow.DrawHead()");
 #endif
             if (null != m_portraitTexture)
             {
@@ -362,7 +367,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * DrawTreeDetails function                                             *
          *                                                                      *
          * Helper function for DrawWindow.                                      *
@@ -371,17 +376,25 @@ namespace YongeTechKerbal
         private void DrawTreeDetails()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreeSelectionWindow.DrawTreeDetails()");
+            Debug.Log("YT_TechTreesSelectionWindow.DrawTreeDetails()");
 #endif
+            string stats = "";
+            stats += "Total Cost: " + m_techTrees[m_choiceIndex].totalCost;
+            stats += "\nTotal Nodes: " + m_techTrees[m_choiceIndex].numNodes;
+            stats += "\n  Teir 1 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level1;
+            stats += "\n  Teir 2 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level2;
+            stats += "\n  Teir 3 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level3;
+
             GUI.Box(m_treeDetailsRect, m_techTrees[m_choiceIndex].desctription, m_textAreaStyle);
 
             GUI.TextArea(m_treeStatsHeaderRect, "Tree Stats", m_textAreaHeaderStyle);
 
-            GUI.Box(m_treeStatsRect, "\nTotal Cost: " + m_techTrees[m_choiceIndex].totalCost + "\nTotal Nodes: " + m_techTrees[m_choiceIndex].numNodes, m_textAreaBoxStyle);
+            GUI.Box(m_treeStatsRect, stats, m_textAreaBoxStyle);
         }
 
+
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * DrawDropDown function                                                *
          *                                                                      *
          * Helper function for DrawWindow.                                      *
@@ -390,7 +403,7 @@ namespace YongeTechKerbal
         private void DrawDropdown()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreeSelectionWindow.DrawDropdown()");
+            Debug.Log("YT_TechTreesSelectionWindow.DrawDropdown()");
 #endif
             //Dropdown button displaying the current choice
             if (GUI.Button(new Rect(m_dropdownRect.x, m_dropdownRect.y, m_dropdownRect.width, DROPDOWN_LINE), m_techTrees[m_choiceIndex].title, m_dropdownButtonStyle))
@@ -417,7 +430,7 @@ namespace YongeTechKerbal
         }
 
         /************************************************************************\
-         * YT_TechTreeSelectionWindow class                                     *
+         * YT_TechTreesSelectionWindow class                                    *
          * DrawConferm function                                                 *
          *                                                                      *
          * Helper function for DrawWindow.                                      *
@@ -426,7 +439,7 @@ namespace YongeTechKerbal
         private void DrawConferm()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreeSelectionWindow.DrawConferm()");
+            Debug.Log("YT_TechTreesSelectionWindow.DrawConferm()");
 #endif
             if (GUI.Button(m_confermRect, m_confermButtonText, m_confermButtonStyle))
             {

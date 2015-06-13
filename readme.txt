@@ -1,4 +1,4 @@
-YongeTech Tech Tree Plugin
+YongeTech Tech Trees Plugin
 version: 1.0
 author: yongedevil  
 ============================
@@ -7,11 +7,11 @@ author: yongedevil
 ======================================
 Contents
 1.0 Description
-2.0 Creating Tech Tree
-  2.1 TechTree ConfigNode
-  2.2 Custom Icons
-  2.3 Example TechTree ConfigNode
-3.0 Installation
+2.0 Installation
+3.0 Creating a Tech Tree
+  3.1 TechTree ConfigNode
+  3.2 Custom Icons
+  3.3 Example TechTree ConfigNode
 4.0 Licence
 ----------------------------------------
 
@@ -19,44 +19,51 @@ Contents
 ================
 1.0 Description:
 ----------------
-The mod's intention is to make it easier to customize tech trees for Kerbal Space Program.  It allows part unlocks to be listed in the TechTree ConfigNode rather than having to edit every Part ConfigNode.  It also adds a tree selection window to let the player select a tree for each new game.
+This mod's intention is to make it easier to customize tech trees for Kerbal Space Program.  It allows part unlocks to be listed in the TechTree ConfigNode rather than having to edit every Part ConfigNode.  It also adds a tree selection window to let the player select a tree for each new game.
 
 
+=================
+2.0 Installation:
+-----------------
+Copy the contents of GameData into the Kerbal GameData folder.
 
-=======================
-2.0 Creating Tech Tree:
------------------------
+  2.1 Known Issues:
+  -----------------
+  There is a conflict between this mod and ModuleManger v2.6.2 and latter.  ModuleManager also edits the active tech tree in Kerbal.  If only use a single modified tree, replace the contents of ModuleManager.TechTree with the custom tree
+
+
+=========================
+3.0 Creating a Tech Tree:
+-------------------------
 The mod adds new support to the TechTree ConfigNode and will create custom icons for use in a tech tree from textures.
 
-  2.1 TechTree ConfigNode:
+  3.1 TechTree ConfigNode:
   ------------------------
-  The mod adsd support for new fields and a new subnode in the TechTree ConfigNode indented to make creating a custom tech tree easier.  These changes do two things: they store information about the techTree to display to the player when selecting a tree to use, and they allow parts to be assigned to techs in the TechTree node rather than requiring each PART node to be edited.
+  The mod adds support for new fields and a new subnode in the TechTree ConfigNode indented to make creating a custom tech tree easier.  These changes do two things: they store information about the tech tree to display to the player when selecting a tree to use, and they allow parts to be assigned to techs in the TechTree node rather than requiring each PART node to be edited.
 
-    2.1.1 TechTree Node Fields:
+    3.1.1 TechTree Node Fields:
     ---------------------------
     Support for 3 new fields has been added to the TechTree ConfigNode.
 
-    title: The name of the tree.  Displayed in the tech tree selection window when starting a new game.
-    
-    description: Single paragraph discription of the tree for the player.  Displayed in the tech tree selection window when starting a new game.
-    
-    unlockAllStartParts: If True the mod will automitically unlock all parts in the starting tech node.  Normally the game will only unlock parts with an entryCost of 0.
+    title: The name of the tree.  Displayed in the tech tree selection window when starting a new game. (45 character limit)
 
-    2.1.2 Unlocks Node:
+    description: Single paragraph description of the tree for the player.  Displayed in the tech tree selection window when starting a new game. (approximately a 400 character limit)
+
+    unlockAllStartParts: If True the mod will automatically unlock all parts in the starting tech node(s), which are any nodes with a cost of 0.  The game does this for all parts with an entryCost of 0, this option extends that to all parts.  This is only relevant if No Entry Purchase Required on Research is disabled in difficulty settings. 
+
+    3.1.2 Unlocks Node:
     -------------------
     The Unlocks Node is a new subnode for the RDNode in TechTree.  The Unlocks node has a list of part fields containing the names of all the parts unlocked by the RDNode.  The mod will read this data and handle editing the TechRequired on all the parts.
 
-    Note: that the game converts '_' to '.' so for parts such as the RT-5, its name is "solidBooster_sm", but its entry in Unlocks needs to be "solidBooster.sm".
 
-
-  2.2 Custom Icons:
+  3.2 Custom Icons:
   -----------------
-  The mod also adds support for custom icons.  All icons should be placed in a directory named "RDSimpleIcons" and be in .png format.  The mod will create a custom icon with the same name as the file, without the extention.
+  The mod also adds support for custom icons.  All icons should be placed in a directory named "RDSimpleIcons" and be in .png or .tga formats.  The mod will create a custom icon with the same name as the file, without the extension.
 
-  .../RDSimpleIcons/customIcon.png will become "icon = customIcon"
+  .../RDSimpleIcons/customIcon_tech.png will become "icon = customIcon_tech"
 
 
-  2.3 Example TechTree ConfigNode:
+  3.3 Example TechTree ConfigNode:
   --------------------------------
 
 TechTree
@@ -120,11 +127,6 @@ TechTree
 }
 
 
-
-=================
-3.0 Installation:
------------------
-Copy the contents of GameData into the Kerbal GameData folder.
 
 
 ============
