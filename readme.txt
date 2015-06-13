@@ -29,7 +29,7 @@ Copy the contents of GameData into the Kerbal GameData folder.
 
   2.1 Known Issues:
   -----------------
-  There is a conflict between this mod and ModuleManger v2.6.2 and latter.  ModuleManager also edits the active tech tree in Kerbal.  If only use a single modified tree, replace the contents of ModuleManager.TechTree with the custom tree
+  Both this mod and ModuleManager (version 2.6.5 as of this writing) attempt to edit the tech tree of the current game.  This mod will override ModuleManager's edits by default. If you would like to keep ModuleManager's edit change the "allowTreeSelection" field in PluginData/YongeTech_TechTreesExpansion/config.xml from '1' to '0'
 
 
 =========================

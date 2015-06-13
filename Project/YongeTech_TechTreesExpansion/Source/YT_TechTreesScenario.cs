@@ -64,11 +64,14 @@ namespace YongeTechKerbal
         //YT_TechTreeScenario node
         //saves if the tech tree has been selected for this game
         private const string YT_SCENARIONODE_FIELD_TREESELECTED = "treeSelected";
+        private const string YT_SCENARIONODE_FIELD_TREEURL = "TechTreeUrl";
 
         private int RDNodeMaxCost1;
         private int RDNodeMaxCost2;
 
 
+        private bool m_allowTreeSelection;
+        private string m_treeURL;
         private bool m_treeSelected;
         private List<YT_TreeDeclaration> m_treeDeclarationsList;
         private YT_TechTreesSelectionWindow m_selectionWindow;
@@ -87,6 +90,8 @@ namespace YongeTechKerbal
             RDNodeMaxCost1 = 100;
             RDNodeMaxCost1 = 500;
 
+            m_allowTreeSelection = true;
+            m_treeURL = null;
             m_treeSelected = false;
             m_treeDeclarationsList = new List<YT_TreeDeclaration>();
             m_selectionWindow = null;
@@ -116,6 +121,11 @@ namespace YongeTechKerbal
                 m_treeSelected = ("TRUE" == (node.GetValue(YT_SCENARIONODE_FIELD_TREESELECTED)).ToUpper());
             else
                 m_treeSelected = false;
+
+            if (node.HasValue(YT_SCENARIONODE_FIELD_TREEURL))
+                m_treeURL = node.GetValue(YT_SCENARIONODE_FIELD_TREEURL);
+            else
+                m_treeURL = null;
         }
 
 
@@ -133,6 +143,11 @@ namespace YongeTechKerbal
 
             //Save data to ConfigNode
             node.AddValue(YT_SCENARIONODE_FIELD_TREESELECTED, m_treeSelected);
+
+            if (null != m_treeURL)
+                node.AddValue(YT_SCENARIONODE_FIELD_TREEURL, m_treeURL);
+            else
+                node.AddValue(YT_SCENARIONODE_FIELD_TREEURL, GetCurrentGameTechTreeUrl());
         }
 
 
@@ -149,7 +164,7 @@ namespace YongeTechKerbal
             //Check that the game mode is Career or Science
             if (Game.Modes.CAREER == HighLogic.CurrentGame.Mode || Game.Modes.SCIENCE_SANDBOX == HighLogic.CurrentGame.Mode)
             {
-                if (!m_treeSelected)
+                if (!m_treeSelected && m_allowTreeSelection)
                 {
                     //Create tree selection window and pass it the list of tree declarations
                     m_selectionWindow = new YT_TechTreesSelectionWindow();
@@ -157,8 +172,14 @@ namespace YongeTechKerbal
                 }
                 else
                 {
-                    //Change to the tech tree saved for this game
-                    ChangeTree(GetCurrentGameTechTreeUrl());
+                    if (null != m_treeURL && m_allowTreeSelection)
+                    {
+                        //use the tree url save with this scenario (this is to override the changes ModuleManager makes)
+                        ChangeTree(m_treeURL);
+                    }
+                    else
+                        //Change to the tech tree saved for this game
+                        ChangeTree(GetCurrentGameTechTreeUrl());
                 }
             }
             else
@@ -186,8 +207,11 @@ namespace YongeTechKerbal
             stockTree_title = configFile.GetValue<string>("stockTree_title");
             stockTree_description = configFile.GetValue<string>("stockTree_description");
 
-            RDNodeMaxCost1 = configFile.GetValue<int>("RDNode_maxCost_level1");
-            RDNodeMaxCost2 = configFile.GetValue<int>("RDNode_maxCost_level2");
+            RDNodeMaxCost1 = configFile.GetValue<int>("RDNodeMaxCost_level1");
+            RDNodeMaxCost2 = configFile.GetValue<int>("RDNodeMaxCost_level2");
+
+            m_allowTreeSelection = configFile.GetValue<bool>("allowTreeSelection");
+
 #if DEBUG
             string values = "";
             values += "stockTree_url = " + stockTree_url + "\n";
@@ -195,6 +219,7 @@ namespace YongeTechKerbal
             values += "stockTree_description = " + stockTree_description + "\n";
             values += "m_RDNodeMaxCost1 = " + RDNodeMaxCost1 + "\n";
             values += "m_RDNodeMaxCost2 = " + RDNodeMaxCost2 + "\n";
+            values += "m_allowTreeSelection = " + m_allowTreeSelection + "\n";
             Debug.Log("YT_TechTreesScenario.ReadConfigFile(): values\n" + values);
 #endif
         }
@@ -342,8 +367,9 @@ namespace YongeTechKerbal
                 m_selectionWindow.windowRect = GUI.Window(this.GetHashCode(), m_selectionWindow.windowRect, m_selectionWindow.DrawWindow, m_selectionWindow.WindowTitle, m_selectionWindow.WindowStyle);
 
                 //If a tree has been picked
-                if (m_treeSelected = m_selectionWindow.Done)
+                if (m_selectionWindow.Done)
                 {
+                    m_treeSelected = true;
                     ChangeTree(m_selectionWindow.TechTreeURL);
 #if DEBUG
                     Debug.Log("YT_TechTreesScenario.OnGUI(): changing tech tree to " + m_selectionWindow.TechTreeURL);
@@ -540,7 +566,7 @@ namespace YongeTechKerbal
                 {
 #if DEBUG
                     //some parts such as kerbalEVA have no config file, so this is not necessarily an error.
-                    Debug.Log("YT_TechTreesScenario.ResetTechRequired(): part.partUrlConfig.parent.fullPath is null for " + part.name);
+                    Debug.Log("YT_TechTreesScenario.ResetTechRequired(): WARNING part.partUrlConfig.parent.fullPath is null for " + part.name);
 #endif
                     continue;
                 }
