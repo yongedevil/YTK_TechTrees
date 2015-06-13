@@ -315,9 +315,9 @@ namespace YongeTechKerbal
             string stats = "";
             stats += "Total Cost: " + m_techTrees[m_choiceIndex].totalCost;
             stats += "\nTotal Nodes: " + m_techTrees[m_choiceIndex].numNodes;
-            stats += "\n  Teir 1 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level1;
-            stats += "\n  Teir 2 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level2;
-            stats += "\n  Teir 3 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level3;
+            stats += "\n  Tier 1 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level1;
+            stats += "\n  Tier 2 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level2;
+            stats += "\n  Tier 3 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level3;
 
             GUI.Box(m_treeDetailsRect, m_techTrees[m_choiceIndex].desctription, m_textAreaStyle);
 
