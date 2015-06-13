@@ -2,3 +2,5 @@ v1.0
 - Added support for Unlocks node in the RDNode.  Parts listed in Unlocks will be modified to require the parent RDNode when the TechTree is active.
 - Added tech tree selection window for new games.
 - Added support to load custom icons found in RDSimpleIcons fold for use in RDNodes.
+- Added code to override ModuleManger's changes to games' TechTreeUrl
+- Added option to disable/enable tree selection
