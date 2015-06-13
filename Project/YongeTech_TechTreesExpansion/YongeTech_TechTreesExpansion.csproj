@@ -49,6 +49,7 @@
     <Compile Include="Source\ConfigNodeParseHelper.cs" />
     <Compile Include="Source\YT_TechTreesScenario.cs" />
     <Compile Include="Source\YT_TechTreesSelectionWindow.cs" />
+    <Compile Include="Source\YT_TechTreesSettings.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

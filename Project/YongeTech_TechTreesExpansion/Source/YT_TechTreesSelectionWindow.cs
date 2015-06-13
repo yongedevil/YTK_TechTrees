@@ -13,11 +13,6 @@ namespace YongeTechKerbal
     \*======================================================*/
     class YT_TechTreesSelectionWindow
     {
-        private int windowX;
-        private int windowY;
-        private int windowWidth;
-        private int windowHeight;
-
         //Constants for placing elements in the window
         private const int SPACING_SECTION_HORIZONTAL = 12;
         private const int SPACING_SECTION_VERTICAL = 8;
@@ -40,11 +35,12 @@ namespace YongeTechKerbal
         private const int STATS_WIDTH = 200;
 
 
+        public string WindowTitle { get { return YT_TechTreesSettings.Instance.WindowTitle; } }
+
         //Done is set to true when the user has clicked conferm
         private bool m_done;
         public bool Done { get { return m_done; } }
 
-        private int m_dropdownMaxSize;
         private bool m_dropdownOpen;
         private Vector2 m_scrollViewVector;
 
@@ -59,7 +55,7 @@ namespace YongeTechKerbal
                 //sets the size of the dropdown list to m_dropdownMaxSize, or the length of the array, whichever is shorter
                 //sets the size of the scrollView to the size of the dropdown or the length of the array, whichever is longer (scoll bar only shows when the array is longer)
                 m_techTrees = value;
-                m_dropdownRect.height = Math.Min(m_dropdownMaxSize, m_techTrees.Length) * DROPDOWN_LINE;
+                m_dropdownRect.height = Math.Min(YT_TechTreesSettings.Instance.DropdownMaxSize, m_techTrees.Length) * DROPDOWN_LINE;
                 m_scrollView_viewRect.height = Mathf.Max(m_dropdownRect.height, (m_techTrees.Length * DROPDOWN_LINE));
             }
         }
@@ -67,17 +63,9 @@ namespace YongeTechKerbal
         private YT_TreeDeclaration[] m_techTrees;
         private int m_choiceIndex;
 
-
-        //strings storing texted used
-        public string WindowTitle { get { return m_windowTitle; } }
-        private string m_windowTitle;
-        private string m_introText;
-        private string m_confermButtonText;
-
+        
         //stores the kerbal portrait displayed in the window
         private Texture m_portraitTexture;
-        private string m_portraitURL;
-        private string m_portraitName;
 
 
         //GUIStyles
@@ -118,23 +106,14 @@ namespace YongeTechKerbal
         {
             //initialize variables
             m_done = false;
-            m_dropdownMaxSize = 3;
             m_dropdownOpen = false;
             m_scrollViewVector = Vector2.zero;
 
-            m_windowTitle = null;
-            m_introText = null;
-            m_confermButtonText = null;
 
             m_portraitTexture = null;
-            m_portraitURL = null;
-            m_portraitName = null;
 
             m_techTrees = null;
             m_choiceIndex = 0;
-
-            //load data from config file
-            ReadConfigFile();
 
             //helper initialization functions
             InitializeStyles();
@@ -200,7 +179,7 @@ namespace YongeTechKerbal
             //Setup rectagles for main areas
             //old code for centring the window
             //windowRect = new Rect(Screen.width / 2 - windowWidth / 2, Screen.height / 2 - windowHeight / 2, windowWidth, windowHeight);
-            windowRect = new Rect(windowX, windowY, windowWidth, windowHeight);
+            windowRect = new Rect(YT_TechTreesSettings.Instance.WindowRect);
 
             //Portrait and intro text areas up top
             m_portraitRect = new Rect(SPACING_BOARDER_LEFT, SPACING_BOARDER_TOP, PORTRAIT_WIDTH, PORTRAIT_HEIGHT);
@@ -211,7 +190,7 @@ namespace YongeTechKerbal
             m_intoRect = new Rect();
             m_intoRect.x = m_portraitRect.x + m_portraitRect.width + SPACING_SECTION_HORIZONTAL;
             m_intoRect.y = m_portraitRect.y;
-            m_intoRect.width = windowWidth - (m_portraitRect.x + m_portraitRect.width + SPACING_SECTION_HORIZONTAL + SPACING_BOARDER_RIGHT);
+            m_intoRect.width = windowRect.width - (m_portraitRect.x + m_portraitRect.width + SPACING_SECTION_HORIZONTAL + SPACING_BOARDER_RIGHT);
             m_intoRect.height = m_portraitNameRect.yMax - m_portraitRect.yMin;
 
             //Tree stats and description area on the bottom
@@ -266,60 +245,15 @@ namespace YongeTechKerbal
         \************************************************************************/
         private void InitializeTextures()
         {
-            GameDatabase.TextureInfo texInfo = GameDatabase.Instance.GetTextureInfo(m_portraitURL);
+            GameDatabase.TextureInfo texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitURL);
 
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load portrait texture from " + m_portraitURL);
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load portrait texture from " + YT_TechTreesSettings.Instance.PortraitURL);
                 return;
             }
 
-            m_portraitTexture = GameDatabase.Instance.GetTextureInfo(m_portraitURL).texture;
-        }
-
-
-        /************************************************************************\
-         * YT_TechTreesSelectionWindow class                                    *
-         * LoadConfigFile function                                              *
-         *                                                                      *
-         * Helper function for the constructor.                                 *
-         * Loads data from the mod's config file.                               *
-        \************************************************************************/
-        private void ReadConfigFile()
-        {
-#if DEBUG
-            Debug.Log("YT_TechTreesSelectionWindow.ReadConfigFile()");
-#endif
-            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesSelectionWindow>();
-
-            configFile.load();
-            windowX = configFile.GetValue<int>("window_x");
-            windowY = configFile.GetValue<int>("window_y");
-            windowWidth = configFile.GetValue<int>("window_width");
-            windowHeight = configFile.GetValue<int>("window_height");
-            m_dropdownMaxSize = configFile.GetValue<int>("dropdown_maxSize");
-
-            m_windowTitle = configFile.GetValue<string>("window_title");
-            m_introText = configFile.GetValue<string>("intro_text");
-            m_confermButtonText = configFile.GetValue<string>("conferm_text");
-
-            m_portraitURL = configFile.GetValue<string>("portrait_textureUrl");
-            m_portraitName = configFile.GetValue<string>("portrait_name");
-
-#if DEBUG
-            string values = "";
-            values += "windowX = " + windowX + "\n";
-            values += "windowY = " + windowY + "\n";
-            values += "windowWidth = " + windowWidth + "\n";
-            values += "windowHeight = " + windowHeight + "\n";
-            values += "m_dropdownMaxSize = " + m_dropdownMaxSize + "\n";
-            values += "m_windowTitle = " + m_windowTitle + "\n";
-            values += "m_introText = " + m_introText + "\n";
-            values += "m_confermButtonText = " + m_confermButtonText + "\n";
-            values += "m_portraitURL = " + m_portraitURL + "\n";
-            values += "m_portraitName = " + m_portraitName + "\n";
-            Debug.Log("YT_TechTreesSelectionWindow.ReadConfigFile(): values\n" + values);
-#endif
+            m_portraitTexture = texInfo.texture;
         }
 
 
@@ -339,7 +273,7 @@ namespace YongeTechKerbal
             DrawDropdown();
             DrawConferm();
 
-            GUI.DragWindow(new Rect(0, 0, windowWidth, windowHeight));
+            GUI.DragWindow(new Rect(0, 0, windowRect.width, windowRect.height));
         }
 
 
@@ -357,13 +291,13 @@ namespace YongeTechKerbal
 #endif
             if (null != m_portraitTexture)
             {
-                GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(m_portraitURL).texture, m_portraitStyle);
-                GUI.Box(m_portraitNameRect, m_portraitName, m_textAreaHeaderStyle);
+                GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitURL).texture, m_portraitStyle);
+                GUI.Box(m_portraitNameRect, YT_TechTreesSettings.Instance.PortraitName, m_textAreaHeaderStyle);
             }
             else
                 GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(HighLogic.CurrentGame.flagURL).texture, m_portraitStyle);
 
-            GUI.Box(m_intoRect, m_introText, m_textAreaStyle);
+            GUI.Box(m_intoRect, YT_TechTreesSettings.Instance.IntroText, m_textAreaStyle);
         }
 
         /************************************************************************\
@@ -441,7 +375,7 @@ namespace YongeTechKerbal
 #if DEBUG_UPDATE
             Debug.Log("YT_TechTreesSelectionWindow.DrawConferm()");
 #endif
-            if (GUI.Button(m_confermRect, m_confermButtonText, m_confermButtonStyle))
+            if (GUI.Button(m_confermRect, YT_TechTreesSettings.Instance.ConfermButtonText, m_confermButtonStyle))
             {
                 m_done = true;
             }

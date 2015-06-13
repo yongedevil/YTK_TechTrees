@@ -42,11 +42,6 @@ namespace YongeTechKerbal
     [KSPScenario(ScenarioCreationOptions.AddToNewScienceSandboxGames | ScenarioCreationOptions.AddToNewCareerGames, GameScenes.SPACECENTER)]
     public class YT_TechTreesScenario : ScenarioModule
     {
-        //Stock Tree information
-        private string stockTree_url;
-        private string stockTree_title;
-        private string stockTree_description;
-
         //Custom TechTree fields
         //gives details on tech trees available
         //title is the displayed name for the tree
@@ -65,12 +60,8 @@ namespace YongeTechKerbal
         //saves if the tech tree has been selected for this game
         private const string YT_SCENARIONODE_FIELD_TREESELECTED = "treeSelected";
         private const string YT_SCENARIONODE_FIELD_TREEURL = "TechTreeUrl";
+        
 
-        private int RDNodeMaxCost1;
-        private int RDNodeMaxCost2;
-
-
-        private bool m_allowTreeSelection;
         private string m_treeURL;
         private bool m_treeSelected;
         private List<YT_TreeDeclaration> m_treeDeclarationsList;
@@ -87,10 +78,6 @@ namespace YongeTechKerbal
 #if DEBUG
             Debug.Log("YT_TechTreesScenario.OnAwake()");
 #endif
-            RDNodeMaxCost1 = 100;
-            RDNodeMaxCost1 = 500;
-
-            m_allowTreeSelection = true;
             m_treeURL = null;
             m_treeSelected = false;
             m_treeDeclarationsList = new List<YT_TreeDeclaration>();
@@ -109,9 +96,6 @@ namespace YongeTechKerbal
             Debug.Log("YT_TechTreesScenario.OnLoad()");
 #endif
             base.OnLoad(node);
-
-            //This loads the field names for reading data from the ConfigNodes, so it has to be first
-            ReadConfigFile();
 
             //loads data on the tree delcarations
             LoadTechTreeData();
@@ -164,7 +148,7 @@ namespace YongeTechKerbal
             //Check that the game mode is Career or Science
             if (Game.Modes.CAREER == HighLogic.CurrentGame.Mode || Game.Modes.SCIENCE_SANDBOX == HighLogic.CurrentGame.Mode)
             {
-                if (!m_treeSelected && m_allowTreeSelection)
+                if (!m_treeSelected && YT_TechTreesSettings.Instance.AllowTreeSelection)
                 {
                     //Create tree selection window and pass it the list of tree declarations
                     m_selectionWindow = new YT_TechTreesSelectionWindow();
@@ -172,7 +156,7 @@ namespace YongeTechKerbal
                 }
                 else
                 {
-                    if (null != m_treeURL && m_allowTreeSelection)
+                    if (null != m_treeURL && YT_TechTreesSettings.Instance.AllowTreeSelection)
                     {
                         //use the tree url save with this scenario (this is to override the changes ModuleManager makes)
                         ChangeTree(m_treeURL);
@@ -186,42 +170,6 @@ namespace YongeTechKerbal
             {
                 m_treeSelected = true;
             }
-        }
-
-        /************************************************************************\
-         * YT_TechTreesScenario class                                           *
-         * ReadConfigFile function                                              *
-         *                                                                      *
-         * Reads settings in from the mod's configuration file.                 *
-        \************************************************************************/
-        private void ReadConfigFile()
-        {
-#if DEBUG
-            Debug.Log("YT_TechTreesScenario.ReadConfigFile()");
-#endif
-            //Read Mod Configuration File
-            KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesScenario>();
-            configFile.load();
-
-            stockTree_url = configFile.GetValue<string>("stockTree_url");
-            stockTree_title = configFile.GetValue<string>("stockTree_title");
-            stockTree_description = configFile.GetValue<string>("stockTree_description");
-
-            RDNodeMaxCost1 = configFile.GetValue<int>("RDNodeMaxCost_level1");
-            RDNodeMaxCost2 = configFile.GetValue<int>("RDNodeMaxCost_level2");
-
-            m_allowTreeSelection = configFile.GetValue<bool>("allowTreeSelection");
-
-#if DEBUG
-            string values = "";
-            values += "stockTree_url = " + stockTree_url + "\n";
-            values += "stockTree_title = " + stockTree_title + "\n";
-            values += "stockTree_description = " + stockTree_description + "\n";
-            values += "m_RDNodeMaxCost1 = " + RDNodeMaxCost1 + "\n";
-            values += "m_RDNodeMaxCost2 = " + RDNodeMaxCost2 + "\n";
-            values += "m_allowTreeSelection = " + m_allowTreeSelection + "\n";
-            Debug.Log("YT_TechTreesScenario.ReadConfigFile(): values\n" + values);
-#endif
         }
 
 
@@ -255,10 +203,10 @@ namespace YongeTechKerbal
 
                     //Check if this is the stock tree
                     //use stock tree title and description loaded from mod config file if it is
-                    if (url == stockTree_url)
+                    if (url == YT_TechTreesSettings.Instance.StockTree_url)
                     {
-                        title = stockTree_title;
-                        description = stockTree_description;
+                        title = YT_TechTreesSettings.Instance.StockTree_title;
+                        description = YT_TechTreesSettings.Instance.StockTree_description;
                     }
 
                     //If not stock tree attempt to read title and description from the TechTree ConfigNode
@@ -339,9 +287,9 @@ namespace YongeTechKerbal
                     {
                         treeData.totalCost += nodeCost;
 
-                        if (nodeCost > RDNodeMaxCost2)
+                        if (nodeCost > YT_TechTreesSettings.Instance.RDNode_maxCost2)
                             treeData.numNodes_level3++;
-                        else if (nodeCost > RDNodeMaxCost1)
+                        else if (nodeCost > YT_TechTreesSettings.Instance.RDNode_maxCost1)
                             treeData.numNodes_level2++;
                         else
                             treeData.numNodes_level1++;
@@ -548,7 +496,6 @@ namespace YongeTechKerbal
         \************************************************************************/
         private void ResetTechRequired()
         {
-            ConfigNode node;
             string techID = null;
 
             foreach (AvailablePart part in PartLoader.LoadedPartsList)
@@ -556,28 +503,13 @@ namespace YongeTechKerbal
 #if DEBUG
                 Debug.Log("YT_TechTreesScenario.ResetTechRequired(): looking at: " + part.name);
 #endif
-                /************************************************************\
-                 * Get the full path to the origonal config file            * 
-                 * Load the ConfigNode from the config file                 *
-                 * Get TechRequired property from the origonal Config file  *
-                 * Check successful at each stage                           *
-                \************************************************************/
-                if (null == part || null == part.partUrlConfig || null == part.partUrlConfig.parent)
+                /****************************************************\
+                 * Get TechRequired from the TechRequiredDatabas    *
+                 * Check successful                                 *
+                \****************************************************/
+                if (null == (techID = YT_TechRequiredDatabase.Instance.GetOrigonalTechID(part.name)))
                 {
-#if DEBUG
-                    //some parts such as kerbalEVA have no config file, so this is not necessarily an error.
-                    Debug.Log("YT_TechTreesScenario.ResetTechRequired(): WARNING part.partUrlConfig.parent.fullPath is null for " + part.name);
-#endif
-                    continue;
-                }
-                if(null == (node = ConfigNode.Load(part.partUrlConfig.parent.fullPath)))
-                {
-                    Debug.Log("YT_TechTreesScenario.ResetTechRequired(): ERROR unable to load ConfigNode for " + part.name + ".  from file: " + part.partUrlConfig.parent.fullPath);
-                    continue;
-                }
-                if(null == (node = node.GetNode("PART")) || null == (techID = node.GetValue("TechRequired")) )
-                {
-                    Debug.Log("YT_TechTreesScenario.ResetTechRequired(): ERROR can't find TechRequired in ConfigNode for " + part.name + ". Node:\n" + node.ToString());
+                    Debug.Log("YT_TechTreesScenario.ResetTechRequired(): WARNING did not find origonal TechRequired for " + part.name);
                     continue;
                 }
 
