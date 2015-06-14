@@ -200,41 +200,10 @@ namespace YongeTechKerbal
 #if DEBUG
             Debug.Log("YT_TechRequiredDatabase.CreateDatabase()");
 #endif
-            ConfigNode node;
-            string techID = null;
-
             foreach (AvailablePart part in PartLoader.LoadedPartsList)
             {
-#if DEBUG
-                Debug.Log("YT_TechRequiredDatabase.CreateDatabase(): looking at: " + part.name);
-#endif
-                /************************************************************\
-                 * Get the full path to the origonal config file            * 
-                 * Load the ConfigNode from the config file                 *
-                 * Get TechRequired property from the origonal Config file  *
-                 * Check successful at each stage                           *
-                \************************************************************/
-                if (null == part || null == part.partUrlConfig || null == part.partUrlConfig.parent)
-                {
-#if DEBUG
-                    //some parts such as kerbalEVA have no config file, so this is not necessarily an error.
-                    Debug.Log("YT_TechRequiredDatabase.CreateDatabase(): WARNING part.partUrlConfig.parent.fullPath is null for " + part.name);
-#endif
-                    continue;
-                }
-                if (null == (node = ConfigNode.Load(part.partUrlConfig.parent.fullPath)))
-                {
-                    Debug.Log("YT_TechRequiredDatabase.CreateDatabase(): ERROR unable to load ConfigNode for " + part.name + ".  from file: " + part.partUrlConfig.parent.fullPath);
-                    continue;
-                }
-                if (null == (node = node.GetNode("PART")) || null == (techID = node.GetValue("TechRequired")))
-                {
-                    Debug.Log("YT_TechRequiredDatabase.CreateDatabase(): ERROR can't find TechRequired in ConfigNode for " + part.name + ". Node:\n" + node.ToString());
-                    continue;
-                }
-
                 //Store the TechRequired from the origonal config file with the name of the part
-                m_origonalTechRequired.Add(part.name, techID);
+                m_origonalTechRequired.Add(part.name, part.TechRequired);
             }
         }
 
