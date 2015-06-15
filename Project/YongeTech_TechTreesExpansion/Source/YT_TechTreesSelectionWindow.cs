@@ -47,20 +47,7 @@ namespace YongeTechKerbal
 
         //Tech Tree variables hold the list of trees and return the selected tree url
         public string TechTreeURL { get { return m_techTrees[m_choiceIndex].url; } }
-        public YT_TreeDeclaration[] TechTrees
-        {
-            set
-            {
-                //sets the array of tree declarations
-                //sets the size of the dropdown list to m_dropdownMaxSize, or the length of the array, whichever is shorter
-                //sets the size of the scrollView to the size of the dropdown or the length of the array, whichever is longer (scoll bar only shows when the array is longer)
-                m_techTrees = value;
-                m_dropdownRect.height = Math.Min(YT_TechTreesSettings.Instance.DropdownMaxSize, m_techTrees.Length) * DROPDOWN_LINE;
-                m_scrollView_viewRect.height = Mathf.Max(m_dropdownRect.height, (m_techTrees.Length * DROPDOWN_LINE));
-            }
-        }
-
-        private YT_TreeDeclaration[] m_techTrees;
+        private List<YT_TreeDeclaration> m_techTrees;
         private int m_choiceIndex;
 
         
@@ -119,7 +106,7 @@ namespace YongeTechKerbal
             InitializeStyles();
             InitializeRects();
             InitializeTextures();
-
+            InitializeTreeList();
         }
 
         /************************************************************************\
@@ -256,6 +243,23 @@ namespace YongeTechKerbal
             m_portraitTexture = texInfo.texture;
         }
 
+        /************************************************************************\
+         * YT_TechTreesSelectionWindow class                                    *
+         * InitializeTreeList function                                          *
+         *                                                                      *
+         * Helper function for the constructor.                                 *
+         * Initializes the list of tech trees.                                  *
+        \************************************************************************/
+        private void InitializeTreeList()
+        {
+            m_techTrees = YT_TechTreeDatabase.Instance.TechTrees;
+
+            //sets the size of the dropdown list to m_dropdownMaxSize, or the length of the array, whichever is shorter
+            //sets the size of the scrollView to the size of the dropdown or the length of the array, whichever is longer (scoll bar only shows when the array is longer)
+            m_dropdownRect.height = Math.Min(YT_TechTreesSettings.Instance.DropdownMaxSize, m_techTrees.Count) * DROPDOWN_LINE;
+            m_scrollView_viewRect.height = Mathf.Max(m_dropdownRect.height, (m_techTrees.Count * DROPDOWN_LINE));
+        }
+
 
         /************************************************************************\
          * YT_TechTreesSelectionWindow class                                    *
@@ -348,10 +352,10 @@ namespace YongeTechKerbal
             {
                 //Create scollview for dropdown
                 m_scrollViewVector = GUI.BeginScrollView(m_scrollView_positionRect, m_scrollViewVector, m_scrollView_viewRect, HighLogic.Skin.horizontalScrollbar, HighLogic.Skin.verticalScrollbar);
-                GUI.Box(new Rect(0, 0, m_dropdownRect.width, Mathf.Max(m_dropdownRect.height, (m_techTrees.Length * DROPDOWN_LINE))), "", m_dropdownBoxStyle);
+                GUI.Box(new Rect(0, 0, m_dropdownRect.width, Mathf.Max(m_dropdownRect.height, (m_techTrees.Count * DROPDOWN_LINE))), "", m_dropdownBoxStyle);
 
                 //Traverse through array of tree declarations and add each one to the dropdown list
-                for (int i = 0; i < m_techTrees.Length; ++i)
+                for (int i = 0; i < m_techTrees.Count; ++i)
                 {
                     if (GUI.Button(new Rect(0, i * DROPDOWN_LINE, m_dropdownRect.width, DROPDOWN_LINE), m_techTrees[i].title, m_dropdownListItemStyle))
                     {

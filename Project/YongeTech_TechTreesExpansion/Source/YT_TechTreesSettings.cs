@@ -42,6 +42,18 @@ namespace YongeTechKerbal
             }
         }
 
+        //Custom TechTree fields
+        //gives details on tech trees available
+        //title is the displayed name for the tree
+        //description should describe the tree to the player
+        public const string TECHTREE_FIELD_TITLE = "title";
+        public const string TECHTREE_FIELD_DESCRIPTION = "description";
+        public const string TECHTREE_FIELD_BUYSTARTPARTS = "unlockAllStartParts";
+
+        public const string RDNode_UNLOCKSNODE_NAME = "Unlocks";
+        public const string RDNode_UNLOCKSNODE_FIELD_PART = "part";
+
+
         //TechTreesScenario settings
         private bool m_allowTreeSelection;
         public bool AllowTreeSelection { get { return m_allowTreeSelection; } }
@@ -81,7 +93,7 @@ namespace YongeTechKerbal
          * YT_TechTreesSettings class                                           *
          * Constructor                                                          *
         \************************************************************************/
-        YT_TechTreesSettings()
+        private YT_TechTreesSettings()
         {
             m_windowRect = new Rect();
 
@@ -150,87 +162,6 @@ namespace YongeTechKerbal
             values += "m_portraitName = " + m_portraitName + "\n";
             Debug.Log("YT_TechTreesSettings.ReadConfigFile(): values\n" + values);
 #endif
-        }
-    }
-
-
-    /*======================================================*\
-     * YT_TechRequiredDatabase class                        *
-     * Singleton class to keep track of the origonal        *
-     * RequiredTech for all parts.                          *
-    \*======================================================*/
-    public class YT_TechRequiredDatabase
-    {
-        //Singleton
-        private static YT_TechRequiredDatabase instance = null;
-        public static YT_TechRequiredDatabase Instance
-        {
-            get
-            {
-                if (null == instance)
-                    instance = new YT_TechRequiredDatabase();
-
-                return instance;
-            }
-        }
-
-        //dictionary of starting techRequired
-        private Dictionary<string, string> m_origonalTechRequired;
-
-
-        /************************************************************************\
-         * YT_TechRequiredDatabase class                                        *
-         * Constructor                                                          *
-        \************************************************************************/
-        public YT_TechRequiredDatabase()
-        {
-            m_origonalTechRequired = new Dictionary<string, string>();
-            CreateDatabase();
-        }
-
-
-        /************************************************************************\
-         * YT_TechRequiredDatabase class                                        *
-         * CreateDatabase function                                              *
-         *                                                                      *
-         * Reads and stores the origonal TechRequired from all parts.           *
-        \************************************************************************/
-        private void CreateDatabase()
-        {
-#if DEBUG
-            Debug.Log("YT_TechRequiredDatabase.CreateDatabase()");
-#endif
-            foreach (AvailablePart part in PartLoader.LoadedPartsList)
-            {
-                //Store the TechRequired from the origonal config file with the name of the part
-                m_origonalTechRequired.Add(part.name, part.TechRequired);
-            }
-        }
-
-
-        /************************************************************************\
-         * YT_TechRequiredDatabase class                                        *
-         * GetOrigonalTechID function                                           *
-         *                                                                      *
-         * Attempt to get the origonal TechRequired for the specified part.     *
-         * Returns:                                                             *
-         *   techID of the origonal TechRequired for the part.                  *
-         *   null if partName not found in the database.                        *
-        \************************************************************************/
-        public string GetOrigonalTechID(string partName)
-        {
-#if DEBUG
-            Debug.Log("YT_TechRequiredDatabase.GetOrigonalTechID(" + partName + ")");
-#endif
-            string techID = null;
-
-            if (!m_origonalTechRequired.TryGetValue(partName, out techID))
-            {
-                techID = null;
-                Debug.Log("YT_TechRequiredDatabase.GetOrigonalTechID(): WARNING " + partName + " not found in database");
-            }
-
-            return techID;
         }
     }
 }

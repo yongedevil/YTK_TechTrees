@@ -7,32 +7,6 @@ using KSP;
 namespace YongeTechKerbal
 {
 
-    public class YT_TreeDeclaration
-    {
-        public string title;
-        public string url;
-        public string desctription;
-
-        public int totalCost;
-        public int numNodes;
-        public int numNodes_level1;
-        public int numNodes_level2;
-        public int numNodes_level3;
-
-        public YT_TreeDeclaration(string title, string url, string description)
-        {
-            this.title = title;
-            this.url = url;
-            this.desctription = description;
-
-            totalCost = 0;
-            numNodes = 0;
-            numNodes_level1 = 0;
-            numNodes_level2 = 0;
-            numNodes_level3 = 0;
-        }
-    }
-
 
     /*======================================================*\
      * YT_TechTreesScenario class                           *
@@ -42,20 +16,6 @@ namespace YongeTechKerbal
     [KSPScenario(ScenarioCreationOptions.AddToNewScienceSandboxGames | ScenarioCreationOptions.AddToNewCareerGames, GameScenes.SPACECENTER)]
     public class YT_TechTreesScenario : ScenarioModule
     {
-        //Custom TechTree fields
-        //gives details on tech trees available
-        //title is the displayed name for the tree
-        //description should describe the tree to the player
-        private const string TECHTREE_FIELD_TITLE = "title";
-        private const string TECHTREE_FIELD_DESCRIPTION = "description";
-        private const string TECHTREE_FIELD_BUYSTARTPARTS = "unlockAllStartParts";
-
-        //Custom Unlocks node added to RDNode node in TechTree node
-        //RDNode_startID is the id of the starting node
-        //UnlocksNode lists parts unlocked by that RDNode
-        private const string RDNode_UNLOCKSNODE_NAME = "Unlocks";
-        private const string RDNode_UNLOCKSNODE_FIELD_PART = "part";
-
         //YT_TechTreeScenario node
         //saves if the tech tree has been selected for this game
         private const string YT_SCENARIONODE_FIELD_TREESELECTED = "treeSelected";
@@ -64,7 +24,6 @@ namespace YongeTechKerbal
 
         private string m_treeURL;
         private bool m_treeSelected;
-        private List<YT_TreeDeclaration> m_treeDeclarationsList;
         private YT_TechTreesSelectionWindow m_selectionWindow;
 
 
@@ -80,7 +39,6 @@ namespace YongeTechKerbal
 #endif
             m_treeURL = null;
             m_treeSelected = false;
-            m_treeDeclarationsList = new List<YT_TreeDeclaration>();
             m_selectionWindow = null;
         }
 
@@ -96,9 +54,6 @@ namespace YongeTechKerbal
             Debug.Log("YT_TechTreesScenario.OnLoad()");
 #endif
             base.OnLoad(node);
-
-            //loads data on the tree delcarations
-            LoadTechTreeData();
 
             //Read data from ConfigNode
             if (node.HasValue(YT_SCENARIONODE_FIELD_TREESELECTED))
@@ -152,7 +107,6 @@ namespace YongeTechKerbal
                 {
                     //Create tree selection window and pass it the list of tree declarations
                     m_selectionWindow = new YT_TechTreesSelectionWindow();
-                    m_selectionWindow.TechTrees = m_treeDeclarationsList.ToArray();
                 }
                 else
                 {
@@ -169,132 +123,6 @@ namespace YongeTechKerbal
             else
             {
                 m_treeSelected = true;
-            }
-        }
-
-
-        /************************************************************************\
-         * YT_TechTreesScenario class                                           *
-         * LoadTechTreeData function                                            *
-         *                                                                      *
-         * Finds TechTree ConfigNodes in the GameDatabase and sets up           *
-         * m_treeDeclarationsList with infor on each TechTree.                  *
-        \************************************************************************/
-        private void LoadTechTreeData()
-        {
-#if DEBUG
-            Debug.Log("YT_TechTreesScenario.LoadModData()");
-#endif
-            ConfigNode node;
-            string title;
-            string url;
-            string description;
-
-            //Traverse through game configs looking for TechTree configs
-            foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.AllConfigs)
-            {
-                if ("TechTree" == config.name)
-                {
-#if DEBUG
-                    Debug.Log("YT_TechTreesScenario.LoadModData(): found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
-#endif
-                    node = config.config;
-                    url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
-
-                    //Check if this is the stock tree
-                    //use stock tree title and description loaded from mod config file if it is
-                    if (url == YT_TechTreesSettings.Instance.StockTree_url)
-                    {
-                        title = YT_TechTreesSettings.Instance.StockTree_title;
-                        description = YT_TechTreesSettings.Instance.StockTree_description;
-                    }
-
-                    //If not stock tree attempt to read title and description from the TechTree ConfigNode
-                    //if they can't be read default values are used instead
-                    else
-                    {
-                        if (node.HasValue(TECHTREE_FIELD_TITLE))
-                            title = node.GetValue(TECHTREE_FIELD_TITLE);
-                        else
-                            title = "(" + config.parent.url + ")";
-
-                        if (node.HasValue(TECHTREE_FIELD_DESCRIPTION))
-                            description = node.GetValue(TECHTREE_FIELD_DESCRIPTION);
-                        else
-                            description = "No description available.";
-                    }
-
-                    //create YT_TreeDeclaration and add stats
-                    YT_TreeDeclaration treeData = new YT_TreeDeclaration(title, url, description);
-                    CalculateTechTreeStats(node, treeData);
-
-                    //Add information to treeDeclarationList
-                    m_treeDeclarationsList.Add(treeData);
-                }
-            }
-        }
-
-        /************************************************************************\
-         * YT_TechTreesScenario class                                           *
-         * CalculateTechTreeStats function                                      *
-         *                                                                      *
-         * Calculates the stats for the given tech tree.                        *
-        \************************************************************************/
-        private void CalculateTechTreeStats(ConfigNode treeNode, YT_TreeDeclaration treeData)
-        {
-            ConfigNode UnlocksNode;
-            bool isHidden;
-            int nodeCost = 0;
-
-            foreach (ConfigNode RDNode in treeNode.nodes)
-            {
-                if ("RDNode" != RDNode.name)
-                    continue;
-
-                /****************************************************************************************\
-                 * Check here if the RDNode is set to hide if Empty and is empty                        *
-                 * If hideEmpty is True                                                                 *
-                 *   Check all unlock parts against the PartLoader to see if they exist.                *
-                 *   If at least one part exists the node is not hidden and is included in the totals.  *
-                \****************************************************************************************/
-                isHidden = false;
-                if (RDNode.HasValue("hideEmpty") && "TRUE" == RDNode.GetValue("hideEmpty").ToUpper() )
-                {
-                    isHidden = true;
-
-                    if (null != (UnlocksNode = RDNode.GetNode(RDNode_UNLOCKSNODE_NAME)))
-                    {
-                        //Check all parts in Unlocks against the PartLoader to see if they exist
-                        foreach (string partName in UnlocksNode.GetValues(RDNode_UNLOCKSNODE_FIELD_PART))
-                        {
-                            if(null != PartLoader.getPartInfoByName(partName))
-                            {
-                                isHidden = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-
-                //If the node is not hidden
-                //Update treeData with totals
-                if (!isHidden)
-                {
-                    treeData.numNodes++;
-
-                    if (ConfigNodeParseHelper.getAsInt(RDNode, "cost", out nodeCost, 0))
-                    {
-                        treeData.totalCost += nodeCost;
-
-                        if (nodeCost > YT_TechTreesSettings.Instance.RDNode_maxCost2)
-                            treeData.numNodes_level3++;
-                        else if (nodeCost > YT_TechTreesSettings.Instance.RDNode_maxCost1)
-                            treeData.numNodes_level2++;
-                        else
-                            treeData.numNodes_level1++;
-                    }
-                }
             }
         }
 
@@ -455,7 +283,7 @@ namespace YongeTechKerbal
                 //purchase all parts in this node.
                 if (ConfigNodeParseHelper.getAsInt(RDNode, "cost", out nodeCost, -1) && 0 == nodeCost)
                 {
-                    if (techtreeNode.HasValue(TECHTREE_FIELD_BUYSTARTPARTS) && "TRUE" == techtreeNode.GetValue(TECHTREE_FIELD_BUYSTARTPARTS).ToUpper())
+                    if (techtreeNode.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_BUYSTARTPARTS) && "TRUE" == techtreeNode.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_BUYSTARTPARTS).ToUpper())
                     {
                         partNamesList = GeneratePartNamesList(RDNode);
                         BuyAllParts(partNamesList, RDScenario, techID);
@@ -533,9 +361,9 @@ namespace YongeTechKerbal
             List<string> partNamesList = new List<string>();
             ConfigNode partsNode = null;
 
-            if (null != (partsNode = RDNode.GetNode(RDNode_UNLOCKSNODE_NAME)))
+            if (null != (partsNode = RDNode.GetNode(YT_TechTreesSettings.RDNode_UNLOCKSNODE_NAME)))
             {
-                foreach (string partName in partsNode.GetValues(RDNode_UNLOCKSNODE_FIELD_PART))
+                foreach (string partName in partsNode.GetValues(YT_TechTreesSettings.RDNode_UNLOCKSNODE_FIELD_PART))
                 {
                     //replace _ with . to match the internal format of the game
                     partNamesList.Add(partName.Replace("_", "."));
@@ -629,7 +457,9 @@ namespace YongeTechKerbal
                 \********************************/
                 if (null == (avalablePart = PartLoader.getPartInfoByName(partName)))
                 {
+#if DEBUG
                     Debug.Log("YT_TechTreesScenario.BuyAllParts(): WARNING part " + partName + " not found in PartLoader.");
+#endif
                     continue;
                 }
 
@@ -666,7 +496,9 @@ namespace YongeTechKerbal
                 \********************************/
                 if (null == (avalablePart = PartLoader.getPartInfoByName(partName)))
                 {
+#if DEBUG
                     Debug.Log("YT_TechTreesScenario.ChangeTechRequired(): WARNING part " + partName + " not found in PartLoader.");
+#endif
                     continue;
                 }
 #if DEBUG
