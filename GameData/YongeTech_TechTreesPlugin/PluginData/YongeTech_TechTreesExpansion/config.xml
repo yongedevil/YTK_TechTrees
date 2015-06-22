@@ -15,6 +15,9 @@ Before we get started though, you have the YongeTech Tech Trees mod installed wh
 	<string name="portrait_textureUrl">YongeTech_TechTreesPlugin/Textures/WernherVonKerman</string>
 	<string name="portrait_name">Wernher Von Kerman</string>
 	
+	<string name="dropdownArrow_textureUrl">YongeTech_TechTreesPlugin/Textures/dropdownArrow</string>
+	<string name="dropdownArrowOpen_textureUrl">YongeTech_TechTreesPlugin/Textures/dropdownArrow</string>
+	
 	<string name="stockTree_url">GameData/Squad/Resources/TechTree.cfg</string>
 	<string name="stockTree_title">Stock Tree</string>
 	<string name="stockTree_description">Default tech tree for Kerbal Space Program.</string>

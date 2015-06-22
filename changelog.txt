@@ -1,3 +1,7 @@
+v1.1
+- Fixed creation of original TechRequired database so it perverse changes made by other mods before the start menu.
+- Created a database of tech trees to reduce file reading.
+
 v1.0.1
 - Fixed spelling mistake with Teir in selection window stats
 

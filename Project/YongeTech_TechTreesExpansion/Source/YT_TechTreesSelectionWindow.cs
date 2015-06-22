@@ -28,6 +28,7 @@ namespace YongeTechKerbal
 
         private const int DROPDOWN_LINE = 30;
         private const int DROPDOWN_WIDTH = 350;
+        private const int DROPDOWN_ARROW_WIDTH = 30;
 
         private const int CONFERM_WIDTH = 200;
 
@@ -51,8 +52,10 @@ namespace YongeTechKerbal
         private int m_choiceIndex;
 
         
-        //stores the kerbal portrait displayed in the window
+        //stores textures to display
         private Texture m_portraitTexture;
+        private Texture m_dropdownArrowTexture;
+        private Texture m_dropdownArrowOpenTexture;
 
 
         //GUIStyles
@@ -77,6 +80,7 @@ namespace YongeTechKerbal
         private Rect m_treeStatsHeaderRect;
         private Rect m_treeStatsRect;
         private Rect m_dropdownRect;
+        private Rect m_dropdownArrowRect;
         private Rect m_confermRect;
 
         private Rect m_scrollView_positionRect;
@@ -98,6 +102,8 @@ namespace YongeTechKerbal
 
 
             m_portraitTexture = null;
+            m_dropdownArrowTexture = null;
+            m_dropdownArrowOpenTexture = null;
 
             m_techTrees = null;
             m_choiceIndex = 0;
@@ -208,6 +214,11 @@ namespace YongeTechKerbal
             m_dropdownRect.width = DROPDOWN_WIDTH;
             m_dropdownRect.height = 3 * DROPDOWN_LINE;
 
+            m_dropdownArrowRect = new Rect(m_dropdownRect);
+            m_dropdownArrowRect.x = m_dropdownRect.xMax - (DROPDOWN_ARROW_WIDTH + 0);
+            m_dropdownArrowRect.width = DROPDOWN_ARROW_WIDTH;
+            m_dropdownArrowRect.height = DROPDOWN_LINE;
+
             //ScrollView for the dropdown
             m_scrollView_positionRect = new Rect(m_dropdownRect);
             m_scrollView_positionRect.y = m_dropdownRect.y + DROPDOWN_LINE;
@@ -232,15 +243,33 @@ namespace YongeTechKerbal
         \************************************************************************/
         private void InitializeTextures()
         {
-            GameDatabase.TextureInfo texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitURL);
+            GameDatabase.TextureInfo texInfo = null;
 
+            texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitTextureUrl);
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load portrait texture from " + YT_TechTreesSettings.Instance.PortraitURL);
-                return;
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load portrait texture from " + YT_TechTreesSettings.Instance.PortraitTextureUrl);
             }
+            else
+                m_portraitTexture = texInfo.texture;
 
-            m_portraitTexture = texInfo.texture;
+
+            texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
+            if (null == texInfo)
+            {
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load dropdown arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
+            }
+            else
+                m_dropdownArrowTexture = texInfo.texture;
+
+
+            texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
+            if (null == texInfo)
+            {
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load dropdown open arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
+            }
+            else
+                m_dropdownArrowOpenTexture = texInfo.texture;
         }
 
         /************************************************************************\
@@ -295,7 +324,7 @@ namespace YongeTechKerbal
 #endif
             if (null != m_portraitTexture)
             {
-                GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitURL).texture, m_portraitStyle);
+                GUI.Box(m_portraitRect, GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitTextureUrl).texture, m_portraitStyle);
                 GUI.Box(m_portraitNameRect, YT_TechTreesSettings.Instance.PortraitName, m_textAreaHeaderStyle);
             }
             else
@@ -345,6 +374,10 @@ namespace YongeTechKerbal
 #endif
             //Dropdown button displaying the current choice
             if (GUI.Button(new Rect(m_dropdownRect.x, m_dropdownRect.y, m_dropdownRect.width, DROPDOWN_LINE), m_techTrees[m_choiceIndex].title, m_dropdownButtonStyle))
+                m_dropdownOpen = !m_dropdownOpen;
+
+            //Arrow pointing down or up and down for dropdown list
+            if (GUI.Button(m_dropdownArrowRect, m_dropdownOpen ? m_dropdownArrowTexture : m_dropdownArrowTexture, m_portraitStyle))
                 m_dropdownOpen = !m_dropdownOpen;
 
             //Dropdown menu

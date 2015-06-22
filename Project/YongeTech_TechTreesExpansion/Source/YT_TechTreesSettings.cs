@@ -83,10 +83,15 @@ namespace YongeTechKerbal
         public string IntroText { get { return m_introText; } }
         public string ConfermButtonText { get { return m_confermButtonText; } }
 
-        private string m_portraitURL;
+        private string m_portraitTextureUrl;
         private string m_portraitName;
-        public string PortraitURL { get { return m_portraitURL; } }
+        public string PortraitTextureUrl { get { return m_portraitTextureUrl; } }
         public string PortraitName { get { return m_portraitName; } }
+
+        private string m_dropdownArrowTextureUrl;
+        private string m_dropdownArrowOpenTextureUrl;
+        public string DropdownArrowTextureUrl { get { return m_dropdownArrowTextureUrl; } }
+        public string DropdownArrowOpenTextureUrl { get { return m_dropdownArrowOpenTextureUrl; } }
 
 
         /************************************************************************\
@@ -138,8 +143,11 @@ namespace YongeTechKerbal
             m_introText = configFile.GetValue<string>("intro_text");
             m_confermButtonText = configFile.GetValue<string>("conferm_text");
 
-            m_portraitURL = configFile.GetValue<string>("portrait_textureUrl");
+            m_portraitTextureUrl = configFile.GetValue<string>("portrait_textureUrl");
             m_portraitName = configFile.GetValue<string>("portrait_name");
+
+            m_dropdownArrowTextureUrl = configFile.GetValue<string>("dropdownArrow_textureUrl");
+            m_dropdownArrowOpenTextureUrl = configFile.GetValue<string>("dropdownArrowOpen_textureUrl");
 
 #if DEBUG
             string values = "";
@@ -158,8 +166,10 @@ namespace YongeTechKerbal
             values += "m_windowTitle = " + m_windowTitle + "\n";
             values += "m_introText = " + m_introText + "\n";
             values += "m_confermButtonText = " + m_confermButtonText + "\n";
-            values += "m_portraitURL = " + m_portraitURL + "\n";
+            values += "m_portraitTextureName = " + m_portraitTextureUrl + "\n";
             values += "m_portraitName = " + m_portraitName + "\n";
+            values += "m_dropdownTextureName = " + m_dropdownArrowTextureUrl + "\n";
+            values += "m_dropdownArrowOpenTextureUrl = " + m_dropdownArrowOpenTextureUrl + "\n";
             Debug.Log("YT_TechTreesSettings.ReadConfigFile(): values\n" + values);
 #endif
         }
