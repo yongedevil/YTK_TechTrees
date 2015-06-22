@@ -165,6 +165,7 @@ namespace YongeTechKerbal
 #if DEBUG
             Debug.Log("YT_TechTreesScenario.LoadModData()");
 #endif
+            bool isStock = false;
             ConfigNode node;
             string title;
             string url;
@@ -173,6 +174,8 @@ namespace YongeTechKerbal
             //Traverse through game configs looking for TechTree configs
             foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.AllConfigs)
             {
+                isStock = false; 
+
                 if ("TechTree" == config.name)
                 {
 #if DEBUG
@@ -185,6 +188,7 @@ namespace YongeTechKerbal
                     //use stock tree title and description loaded from mod config file if it is
                     if (url == YT_TechTreesSettings.Instance.StockTree_url)
                     {
+                        isStock = true;
                         title = YT_TechTreesSettings.Instance.StockTree_title;
                         description = YT_TechTreesSettings.Instance.StockTree_description;
                     }
@@ -208,8 +212,12 @@ namespace YongeTechKerbal
                     YT_TreeDeclaration treeData = new YT_TreeDeclaration(title, url, description);
                     CalculateTechTreeStats(node, treeData);
 
+
                     //Add information to treeDeclarationList
-                    m_techTrees.Add(treeData);
+                    if (isStock)
+                        m_techTrees.Insert(0, treeData);
+                    else
+                        m_techTrees.Add(treeData);
                 }
             }
         }
