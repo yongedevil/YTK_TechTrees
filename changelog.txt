@@ -1,5 +1,6 @@
 v1.3
 - Added support for .dds icon textures
+- Converted selection window textures to .dds
 
 v1.2.1
 - Fixed a bug where the mod would crash if Kerbal had two parts with the same name.
