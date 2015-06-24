@@ -1,3 +1,9 @@
+v1.3
+- Added support for .dds icon textures
+
+v1.2.1
+- Fixed a bug where the mod would crash if Kerbal had two parts with the same name.
+
 v1.2
 - Stock tech tree will always be first in the list now.
 - Added arrow to the dropdown button.

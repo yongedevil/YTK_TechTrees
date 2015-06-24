@@ -1,5 +1,5 @@
 YongeTech Tech Trees Plugin
-version: 1.2
+version: 1.2.1
 author: yongedevil  
 ============================
 
@@ -19,7 +19,7 @@ Contents
 ================
 1.0 Description:
 ----------------
-By itself this mod doesn’t change the technology tree in Kerbal Space Program.  Its intent is to make it easier for others to create custom tech trees.
+By itself this mod doesn’t change the technology tree in Kerbal Space Program.  Instead, it adds support for other mods to do so more easily.
   - Allows part unlocks to be listed in the TechTree ConfigNode rather than having to edit every Part ConfigNode.
   - Adds support for using custom textures to create icons for the tech tree.
   - Adds a tree selection window to let the player select a tree for each new game.
@@ -32,7 +32,9 @@ Copy the contents of GameData into the Kerbal GameData folder.
 
   2.1 Known Issues:
   -----------------
-  Both this mod and ModuleManager (on version 2.6.5 as of this writing) attempt to edit the tech tree of the current game.  This mod should override ModuleManager's edits by default.  If you would like to keep ModuleManager's edit change the "allowTreeSelection" field in PluginData/YongeTech_TechTreesExpansion/config.xml from '1' to '0'.  This will keep support for the TechTree ConfigNode additions and custom icon support, but remove the option to select a tech tree.
+  Both this mod and ModuleManager (on version 2.6.5 as of this writing) attempt to edit the tech tree of the current game.  This mod's changes should have priority.
+
+  If you would like to disable the option to select a tech tree and the conflict with ModuleManager change the "allowTreeSelection" field in PluginData/YongeTech_TechTreesExpansion/config.xml from '1' to '0'.  This will keep support for the TechTree ConfigNode additions and custom icon support, but remove the option to select a tech tree.
 
 
 =========================
@@ -74,7 +76,7 @@ TechTree
 
     description: Single paragraph description of the tree for the player.  Displayed in the tech tree selection window when starting a new game. (approximately a 400 character limit)
 
-    unlockAllStartParts: If True the mod will automatically unlock all parts in the starting tech node(s), which are any nodes with a cost of 0.  The game does this for all parts with an entryCost of 0, this option extends that to all parts.  This is only relevant if No Entry Purchase Required on Research is disabled in difficulty settings.
+    unlockAllStartParts: If True the mod will automatically unlock all parts in the starting tech node(s), which are any tech nodes with a cost of 0.  This is only relevant if No Entry Purchase Required on Research is disabled in difficulty settings.
 
     3.1.2 Unlocks Node:
     The Unlocks Node is a new subnode for the RDNode in TechTree.  The Unlocks node has a list of "part" fields containing the names of all the parts unlocked by the RDNode.  The mod will read this data and handle editing the TechRequired on all the parts.
@@ -82,7 +84,7 @@ TechTree
 
   3.2 Custom Icons:
   -----------------
-  The mod also adds support for custom icons.  All icons should be placed in a directory named "RDSimpleIcons".  .png and .tga formats are supported.  The mod will create a custom icon with the same name as the file, without the extension.
+  The mod also adds support for custom icons.  All icons should be placed in a directory named "RDSimpleIcons".  .png, .tga, and .dds formats are supported.  The mod will create a custom icon with the same name as the file, without the extension.
 
   .../RDSimpleIcons/customIcon_tech.png will become "icon = customIcon_tech"
 

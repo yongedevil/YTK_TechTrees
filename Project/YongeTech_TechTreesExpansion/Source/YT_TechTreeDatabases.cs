@@ -85,8 +85,11 @@ namespace YongeTechKerbal
 #endif
             foreach (AvailablePart part in PartLoader.LoadedPartsList)
             {
-                //Store the TechRequired from the origonal config file with the name of the part
-                m_origonalTechRequired.Add(part.name, part.TechRequired);
+                if (!m_origonalTechRequired.ContainsKey(part.name))
+                {
+                    //Store the TechRequired from the origonal config file with the name of the part
+                    m_origonalTechRequired.Add(part.name, part.TechRequired);
+                }
             }
         }
 
