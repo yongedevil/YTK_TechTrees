@@ -194,7 +194,11 @@ namespace YongeTechKerbal
              * Get the TechTree node from the tree URL  *
              * Check successful                         *
             \********************************************/
-            if (null == (techtreeNode = ConfigNode.Load(treeURL).GetNode("TechTree")))
+            try
+            {
+                techtreeNode = ConfigNode.Load(treeURL).GetNode("TechTree");
+            }
+            catch(NullReferenceException)
             {
                 Debug.Log("YT_TechTreesScenario.ChangeTree(): ERROR TechTree node not loaded from url " + treeURL);
                 return;
