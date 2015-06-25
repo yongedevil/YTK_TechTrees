@@ -85,10 +85,14 @@ namespace YongeTechKerbal
 #endif
             foreach (AvailablePart part in PartLoader.LoadedPartsList)
             {
-                if (!m_origonalTechRequired.ContainsKey(part.name))
+                //Store the TechRequired from the origonal config file with the name of the part
+                try
                 {
-                    //Store the TechRequired from the origonal config file with the name of the part
                     m_origonalTechRequired.Add(part.name, part.TechRequired);
+                }
+                catch(ArgumentException)
+                {
+                    Debug.Log("YT_TechRequiredDatabase.CreateDatabase(): ERROR part with the same name already exisits " + part.name);
                 }
             }
         }

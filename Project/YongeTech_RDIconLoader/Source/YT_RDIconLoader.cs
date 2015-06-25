@@ -150,16 +150,16 @@ namespace YongeTechKerbal
 #if DEBUG
                 Debug.Log("YT_RDIconLoader.LoadIcons(): loading " + iconData.name);
 #endif
-                GameDatabase.TextureInfo texInfo = GameDatabase.Instance.GetTextureInfo(iconData.textureURL);
-
-                if (null == texInfo)
+                try
                 {
-                    Debug.Log("YT_RDIconLoader.LoadIcons(): ERROR unable to get texture info for " + iconData.textureURL);
-                    continue;
+                    customIcon = new Icon("", GameDatabase.Instance.GetTextureInfo(iconData.textureURL).texture);
+                    RDController.Instance.iconLoader.iconDictionary.Add(iconData.name, customIcon);
                 }
 
-                customIcon = new Icon("", texInfo.texture);
-                RDController.Instance.iconLoader.iconDictionary.Add(iconData.name, customIcon);
+                catch (NullReferenceException)
+                {
+                    Debug.Log("YT_RDIconLoader.LoadIcons(): ERROR unable to get texture info for " + iconData.textureURL);
+                }
             }
         }
     }

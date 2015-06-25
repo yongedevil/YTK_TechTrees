@@ -363,11 +363,11 @@ namespace YongeTechKerbal
             Debug.Log("YT_TechTreesScenario.GeneratePartNamesList()");
 #endif
             List<string> partNamesList = new List<string>();
-            ConfigNode partsNode = null;
+            ConfigNode unlocksNode = null;
 
-            if (null != (partsNode = RDNode.GetNode(YT_TechTreesSettings.RDNode_UNLOCKSNODE_NAME)))
+            if (null != (unlocksNode = RDNode.GetNode(YT_TechTreesSettings.RDNode_UNLOCKSNODE_NAME)))
             {
-                foreach (string partName in partsNode.GetValues(YT_TechTreesSettings.RDNode_UNLOCKSNODE_FIELD_PART))
+                foreach (string partName in unlocksNode.GetValues(YT_TechTreesSettings.RDNode_UNLOCKSNODE_FIELD_PART))
                 {
                     //replace _ with . to match the internal format of the game
                     partNamesList.Add(partName.Replace("_", "."));
@@ -490,25 +490,21 @@ namespace YongeTechKerbal
 #if DEBUG
             Debug.Log("YT_TechTreesScenario.ChangeTechRequired()");
 #endif
-            AvailablePart avalablePart = null;
-
             foreach (string partName in partNamesList)
             {
-                /********************************\
-                 * Get part from PartLoader     *
-                 * Check successful             *
-                \********************************/
-                if (null == (avalablePart = PartLoader.getPartInfoByName(partName)))
+#if DEBUG
+                Debug.Log("YT_TechTreesScenario.ChangeTechRequired(): edditing " + partName + " to require " + techID);
+#endif
+                try
+                {
+                    PartLoader.getPartInfoByName(partName).TechRequired = techID;
+                }
+                catch (NullReferenceException)
                 {
 #if DEBUG
                     Debug.Log("YT_TechTreesScenario.ChangeTechRequired(): WARNING part " + partName + " not found in PartLoader.");
 #endif
-                    continue;
                 }
-#if DEBUG
-                Debug.Log("YT_TechTreesScenario.ChangeTechRequired(): edditing " + partName + " to require " + techID);
-#endif
-                avalablePart.TechRequired = techID;
             }
         }
 
