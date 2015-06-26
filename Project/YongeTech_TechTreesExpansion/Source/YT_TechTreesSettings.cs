@@ -118,7 +118,6 @@ namespace YongeTechKerbal
             Debug.Log("YT_TechTreesSettings.ReadConfigFile()");
 #endif
             //Read Mod Configuration File
-
             KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesSettings>();
             configFile.load();
 
