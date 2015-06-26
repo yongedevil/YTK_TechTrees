@@ -6,8 +6,6 @@ using KSP;
 
 namespace YongeTechKerbal
 {
-
-
     /*======================================================*\
      * YT_TechTreesScenario class                           *
      * ScenarioModule to handle seting up the tech tree for *
@@ -37,6 +35,8 @@ namespace YongeTechKerbal
 #if DEBUG
             Debug.Log("YT_TechTreesScenario.OnAwake()");
 #endif
+            base.OnAwake();
+
             m_treeURL = null;
             m_treeSelected = false;
             m_selectionWindow = null;
