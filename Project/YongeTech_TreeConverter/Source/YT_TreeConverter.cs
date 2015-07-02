@@ -24,10 +24,13 @@ namespace YongeTechKerbal
         \************************************************************************/
         public void Start()
         {
-            int treeCount = 0;
-            foreach (ConfigNode techTreeNode in GameDatabase.Instance.GetConfigNodes("TechTree"))
+            if (YT_TreeConverterSettings.Instance.EnableConverter)
             {
-                CompleteTree(techTreeNode, "tree " + ++treeCount + ".txt");
+                int treeCount = 0;
+                foreach (ConfigNode techTreeNode in GameDatabase.Instance.GetConfigNodes("TechTree"))
+                {
+                    CompleteTree(techTreeNode, "tree " + ++treeCount + ".txt");
+                }
             }
         }
 
@@ -36,9 +39,9 @@ namespace YongeTechKerbal
          * YT_TreeConverter class                                               *
          * CompleteTree function                                                *
          *                                                                      *
-         * Prints out techTreeNode to the debug log with the Unlocks filled in  *
+         * Write a copy of the TechTree to fileName with the Unlocks filled in  *
          * with all parts that:                                                 *
-         * have a TechRequired of that node                                     *
+         * have a TechRequired of that node.                                    *
          * are not listed in another tech node's Unlock section.                *
         \************************************************************************/
         private void CompleteTree(ConfigNode incompletetreeNode, string fileName)

@@ -1,6 +1,7 @@
 Description:
 ------------
 By itself this mod doesn’t change the technology tree in Kerbal Space Program.  Instead, it adds support for other mods to do so more easily.
+
   * Allows part unlocks to be listed in the TechTree ConfigNode rather than having to edit every Part ConfigNode.
   * Adds support for using custom textures to create icons for the tech tree.
   * Adds a tree selection window to let the player select a tree for each new game.
@@ -23,6 +24,13 @@ If you would like to disable the option to select a tech tree and the conflict w
 Creating a Tech Tree:
 ---------------------
 The mod adds new support to the TechTree ConfigNode and will create icons for use in a tech tree from custom textures.
+
+[YongeTech Tech Tree Converter](https://github.com/yongedevil/YTK_TechTrees/releases/tag/v1.0-converter) helps convert existing tech trees by filling in the Unlocks nodes for all techs.  It will add all parts that:
+
+ * have a TechRequired of that node.
+ * are not listed in another tech node's Unlock section.
+ 
+It writes the filled out TechTree to a txt file in the mod's directory.  It cannot differentiate between active and inactive trees and so it performs this conversion for all TechTrees installed, and it also dose not name the output files in any meaningful way.  It is necessary to inspect the output files to locate the correct tree and then add the *title* and *description* fields to it.
  
  
 #### TechTree ConfigNode:
