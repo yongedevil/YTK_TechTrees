@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_RDIconLoader", "Y
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_TechTreesExpansion", "YongeTech_TechTreesExpansion\YongeTech_TechTreesExpansion.csproj", "{47E494A6-871D-4F44-83DB-08312D4C6E29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_TreeConverter", "YongeTech_TreeConverter\YongeTech_TreeConverter.csproj", "{49132BB5-5C34-44FE-8C57-14715B5A8AAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{47E494A6-871D-4F44-83DB-08312D4C6E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47E494A6-871D-4F44-83DB-08312D4C6E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47E494A6-871D-4F44-83DB-08312D4C6E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -140,7 +140,7 @@ namespace YongeTechKerbal
             if (!m_treeSelected && null != m_selectionWindow)
             {
                 //Draw the tree selection window
-                m_selectionWindow.windowRect = GUI.Window(this.GetHashCode(), m_selectionWindow.windowRect, m_selectionWindow.DrawWindow, m_selectionWindow.WindowTitle, m_selectionWindow.WindowStyle);
+                m_selectionWindow.windowRect = GUI.Window(m_selectionWindow.GetHashCode(), m_selectionWindow.windowRect, m_selectionWindow.DrawWindow, m_selectionWindow.WindowTitle, m_selectionWindow.WindowStyle);
 
                 //If a tree has been picked
                 if (m_selectionWindow.Done)
