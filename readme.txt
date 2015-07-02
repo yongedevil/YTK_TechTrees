@@ -1,5 +1,5 @@
 YongeTech Tech Trees Plugin
-version: 1.2.1
+version: 1.3
 author: yongedevil  
 ============================
 
@@ -32,9 +32,13 @@ Copy the contents of GameData into the Kerbal GameData folder.
 
   2.1 Known Issues:
   -----------------
+  This mod tracks parts by their name field.  This means if two parts have the same name, only the first will be editied.
+
   Both this mod and ModuleManager (on version 2.6.5 as of this writing) attempt to edit the tech tree of the current game.  This mod's changes should have priority.
 
   If you would like to disable the option to select a tech tree and the conflict with ModuleManager change the "allowTreeSelection" field in PluginData/YongeTech_TechTreesExpansion/config.xml from '1' to '0'.  This will keep support for the TechTree ConfigNode additions and custom icon support, but remove the option to select a tech tree.
+  
+
 
 
 =========================
