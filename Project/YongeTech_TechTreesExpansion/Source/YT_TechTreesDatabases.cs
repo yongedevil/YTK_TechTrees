@@ -186,7 +186,7 @@ namespace YongeTechKerbal
                 if ("TechTree" == config.name)
                 {
 #if DEBUG
-                    Debug.Log("YT_TechTreesScenario.LoadModData(): found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
+                    Debug.Log("YT_TechTreesScenario.LoadTechTreeData(): found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
 #endif
                     node = config.config;
                     url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
