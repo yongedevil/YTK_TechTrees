@@ -22,11 +22,11 @@ namespace YongeTechKerbal
                 }
                 catch (OverflowException)
                 {
-                    Debug.Log("ConfigNodeParseHelper.getAsInt(): ERROR OverflowException.  cost value is outside the range of Int32 type. " + node.GetValue("cost"));
+                    Debug.Log("ConfigNodeParseHelper.getAsInt(): ERROR OverflowException.  " + field + " value is outside the range of Int32 type. " + node.GetValue(field));
                 }
                 catch (FormatException)
                 {
-                    Debug.Log("ConfigNodeParseHelper.getAsInt(): ERROR FormatException.  cost value is not in a recognized format. " + node.GetValue("cost"));
+                    Debug.Log("ConfigNodeParseHelper.getAsInt(): ERROR FormatException.  " + field + " value is not in a recognized format. " + node.GetValue(field));
                 }
             }
 
