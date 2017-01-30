@@ -248,7 +248,7 @@ namespace YongeTechKerbal
             texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitTextureUrl);
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load portrait texture from " + YT_TechTreesSettings.Instance.PortraitTextureUrl);
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load portrait texture from " + YT_TechTreesSettings.Instance.PortraitTextureUrl);
             }
             else
                 m_portraitTexture = texInfo.texture;
@@ -257,7 +257,7 @@ namespace YongeTechKerbal
             texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load dropdown arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load dropdown arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
             }
             else
                 m_dropdownArrowTexture = texInfo.texture;
@@ -266,7 +266,7 @@ namespace YongeTechKerbal
             texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures(): ERROR unable to load dropdown open arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
+                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load dropdown open arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
             }
             else
                 m_dropdownArrowOpenTexture = texInfo.texture;

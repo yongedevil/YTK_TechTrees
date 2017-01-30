@@ -1,3 +1,6 @@
+v1.4
+- Updated for Kerbal 1.2.2
+
 v1.3
 - Added support for .dds icon textures
 - Converted selection window textures to .dds

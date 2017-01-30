@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using KSP;
@@ -25,7 +26,6 @@ namespace YongeTechKerbal
         string RDIconFolder_name;
 
         List<YT_IconData> m_iconDataList;
-        bool m_iconsAdded;
 
         /************************************************************************\
          * YT_RDIconLoader class                                                *
@@ -35,13 +35,11 @@ namespace YongeTechKerbal
         public void Awake()
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.Awake()");
+            Debug.Log("YT_RDIconLoader.Awake");
 #endif
             DontDestroyOnLoad(this);
 
             RDIconFolder_name = null;
-
-            m_iconsAdded = false;
             m_iconDataList = new List<YT_IconData>();
         }
 
@@ -54,7 +52,7 @@ namespace YongeTechKerbal
         public void Start()
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.Start()");
+            Debug.Log("YT_RDIconLoader.Start");
 #endif
             ReadConfigFile();
 
@@ -63,17 +61,17 @@ namespace YongeTechKerbal
             {
                 if (RDIconFolder_name == dir.name)
                 {
-                    //Go through all files in this folder looking for .png files
+                    //Go through all files in this folder looking for .png, .tga, and .dds files
                     //add info for these files to m_iconDataList
                     foreach (UrlDir.UrlFile file in dir.files)
                     {
 #if DEBUG
-                        Debug.Log("YT_RDIconLoader.Start(): looking at file " + file.name + "." + file.fileExtension);
+                        Debug.Log("YT_RDIconLoader.Start: looking at file " + file.name + "." + file.fileExtension);
 #endif
                         if ("png" == file.fileExtension || "tga" == file.fileExtension || "dds" == file.fileExtension)
                         {
 #if DEBUG
-                            Debug.Log("YT_RDIconLoader.Start(): adding file to iconDataList");
+                            Debug.Log("YT_RDIconLoader.Start: adding file to iconDataList");
 #endif
                             m_iconDataList.Add(new YT_IconData(file.name, file.url));
                         }
@@ -92,7 +90,7 @@ namespace YongeTechKerbal
         private void ReadConfigFile()
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.ReadConfigFile()");
+            Debug.Log("YT_RDIconLoader.ReadConfigFile");
 #endif
             //Read Mod Configuration File
             KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_RDIconLoader>();
@@ -102,7 +100,7 @@ namespace YongeTechKerbal
 #if DEBUG
             string values = "";
             values += "RDIconFolder = " + RDIconFolder_name + "\n";
-            Debug.Log("YT_RDIconLoader.ReadConfigFile(): values\n" + values);
+            Debug.Log("YT_RDIconLoader.ReadConfigFile: values\n" + values);
 #endif
         }
 
@@ -117,18 +115,10 @@ namespace YongeTechKerbal
 #if DEBUG_UPDATE
             Debug.Log("YT_RDIconLoader.Update()");
 #endif
-            if (null != RDController.Instance)
+            IconLoader iconLoader = FindObjectOfType<IconLoader>();
+            if (null != iconLoader)
             {
-                if (!m_iconsAdded)
-                {
-                    LoadIcons();
-                    m_iconsAdded = true;
-                }
-            }
-            else
-            {
-                //icons need to be reloaded every time the RDController is
-                m_iconsAdded = false;
+                LoadIcons(iconLoader);
             }
         }
 
@@ -138,27 +128,38 @@ namespace YongeTechKerbal
          * LoadIcons function                                                   *
          *                                                                      *
         \************************************************************************/
-        private void LoadIcons()
+        private void LoadIcons(IconLoader iconLoader)
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.LoadIcons()");
+            Debug.Log("YT_RDIconLoader.LoadIcons");
 #endif
             Icon customIcon;
 
-            foreach(YT_IconData iconData in m_iconDataList)
+
+            foreach (YT_IconData iconData in m_iconDataList)
             {
 #if DEBUG
-                Debug.Log("YT_RDIconLoader.LoadIcons(): loading " + iconData.name);
+                Debug.Log("YT_RDIconLoader.LoadIcons: loading " + iconData.name);
 #endif
-                try
+                if (!iconLoader.iconDictionary.ContainsKey(iconData.name))
                 {
-                    customIcon = new Icon("", GameDatabase.Instance.GetTextureInfo(iconData.textureURL).texture);
-                    RDController.Instance.iconLoader.iconDictionary.Add(iconData.name, customIcon);
-                }
+                    try
+                    {
+                        customIcon = new Icon("", GameDatabase.Instance.GetTextureInfo(iconData.textureURL).texture);
+                        iconLoader.iconDictionary.Add(iconData.name, customIcon);
+                        //iconLoader.icons.Add(customIcon);  //it does not appear to be nessicary to add the icon to the list
+                    }
 
-                catch (NullReferenceException)
-                {
-                    Debug.Log("YT_RDIconLoader.LoadIcons(): ERROR unable to get texture info for " + iconData.textureURL);
+                    catch (ArgumentException)
+                    {
+#if DEBUG
+                        Debug.Log("YT_RDIconLoader.LoadIcons: ERROR icon with the name " + iconData.name + "already exisits.");
+#endif
+                    }
+                    catch (NullReferenceException)
+                    {
+                        Debug.Log("YT_RDIconLoader.LoadIcons: ERROR unable to get texture info for " + iconData.textureURL);
+                    }
                 }
             }
         }
