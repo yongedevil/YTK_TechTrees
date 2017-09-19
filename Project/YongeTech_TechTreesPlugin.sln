@@ -1,11 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_RDIconLoader", "YongeTech_RDIconLoader\YongeTech_RDIconLoader.csproj", "{EC799420-18B1-4117-A15B-8D440C9679D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_TechTreesExpansion", "YongeTech_TechTreesExpansion\YongeTech_TechTreesExpansion.csproj", "{47E494A6-871D-4F44-83DB-08312D4C6E29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{D9B8576D-039F-416A-B518-E331AB828B9D}"
+	ProjectSection(SolutionItems) = preProject
+		..\buildRelease.bat = ..\buildRelease.bat
+		..\changelog.txt = ..\changelog.txt
+		..\deploy.bat = ..\deploy.bat
+		..\kerbalstuff.txt = ..\kerbalstuff.txt
+		..\readme.md = ..\readme.md
+		..\YongeTech_TechTreesPlugin.version = ..\YongeTech_TechTreesPlugin.version
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +34,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {95B3EB0F-3D94-4AF9-9A04-15228FA29CFF}
 	EndGlobalSection
 EndGlobal

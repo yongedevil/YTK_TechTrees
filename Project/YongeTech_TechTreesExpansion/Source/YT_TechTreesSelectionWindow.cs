@@ -248,7 +248,7 @@ namespace YongeTechKerbal
             texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.PortraitTextureUrl);
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load portrait texture from " + YT_TechTreesSettings.Instance.PortraitTextureUrl);
+                Log.Info("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load portrait texture from " + YT_TechTreesSettings.Instance.PortraitTextureUrl);
             }
             else
                 m_portraitTexture = texInfo.texture;
@@ -257,7 +257,7 @@ namespace YongeTechKerbal
             texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load dropdown arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
+                Log.Info("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load dropdown arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowTextureUrl);
             }
             else
                 m_dropdownArrowTexture = texInfo.texture;
@@ -266,7 +266,7 @@ namespace YongeTechKerbal
             texInfo = GameDatabase.Instance.GetTextureInfo(YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
             if (null == texInfo)
             {
-                Debug.Log("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load dropdown open arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
+                Log.Info("YT_TechTreesSelectionWindow.InitializeTextures: ERROR unable to load dropdown open arrow texture from " + YT_TechTreesSettings.Instance.DropdownArrowOpenTextureUrl);
             }
             else
                 m_dropdownArrowOpenTexture = texInfo.texture;
@@ -298,7 +298,7 @@ namespace YongeTechKerbal
         public void DrawWindow(int id)
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreesSelectionWindow.DrawWindow()");
+            Log.Info("YT_TechTreesSelectionWindow.DrawWindow()");
 #endif
             DrawHead();
             DrawTreeDetails();
@@ -320,7 +320,7 @@ namespace YongeTechKerbal
         private void DrawHead()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreesSelectionWindow.DrawHead()");
+            Log.Info("YT_TechTreesSelectionWindow.DrawHead()");
 #endif
             if (null != m_portraitTexture)
             {
@@ -343,7 +343,7 @@ namespace YongeTechKerbal
         private void DrawTreeDetails()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreesSelectionWindow.DrawTreeDetails()");
+            Log.Info("YT_TechTreesSelectionWindow.DrawTreeDetails()");
 #endif
             string stats = "";
             stats += "Total Cost: " + m_techTrees[m_choiceIndex].totalCost;
@@ -370,7 +370,7 @@ namespace YongeTechKerbal
         private void DrawDropdown()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreesSelectionWindow.DrawDropdown()");
+            Log.Info("YT_TechTreesSelectionWindow.DrawDropdown()");
 #endif
             //Dropdown button displaying the current choice
             if (GUI.Button(new Rect(m_dropdownRect.x, m_dropdownRect.y, m_dropdownRect.width, DROPDOWN_LINE), m_techTrees[m_choiceIndex].title, m_dropdownButtonStyle))
@@ -410,7 +410,7 @@ namespace YongeTechKerbal
         private void DrawConferm()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_TechTreesSelectionWindow.DrawConferm()");
+            Log.Info("YT_TechTreesSelectionWindow.DrawConferm()");
 #endif
             if (GUI.Button(m_confermRect, YT_TechTreesSettings.Instance.ConfermButtonText, m_confermButtonStyle))
             {
