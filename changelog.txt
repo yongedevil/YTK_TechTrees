@@ -1,3 +1,9 @@
+1.5.1
+	Moved DLLs into Plugin directory
+	Moved PluginData into the Plugins directory
+	Added TreeConverter back
+	Set the Treeconvert to be disabled, can be enabled in config (xml) file
+	
 1.5.0
 	Updated for 1.3
 

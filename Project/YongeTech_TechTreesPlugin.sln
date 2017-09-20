@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_RDIconLoader", "YongeTech_RDIconLoader\YongeTech_RDIconLoader.csproj", "{EC799420-18B1-4117-A15B-8D440C9679D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_TechTreesExpansion", "YongeTech_TechTreesExpansion\YongeTech_TechTreesExpansion.csproj", "{47E494A6-871D-4F44-83DB-08312D4C6E29}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EC799420-18B1-4117-A15B-8D440C9679D6} = {EC799420-18B1-4117-A15B-8D440C9679D6}
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA} = {49132BB5-5C34-44FE-8C57-14715B5A8AAA}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{D9B8576D-039F-416A-B518-E331AB828B9D}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,6 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		..\kerbalstuff.txt = ..\kerbalstuff.txt
 		..\readme.md = ..\readme.md
 		..\YongeTech_TechTreesPlugin.version = ..\YongeTech_TechTreesPlugin.version
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YongeTech_TreeConverter", "YongeTech_TreeConverter\YongeTech_TreeConverter.csproj", "{49132BB5-5C34-44FE-8C57-14715B5A8AAA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EC799420-18B1-4117-A15B-8D440C9679D6} = {EC799420-18B1-4117-A15B-8D440C9679D6}
 	EndProjectSection
 EndProject
 Global
@@ -31,6 +40,10 @@ Global
 		{47E494A6-871D-4F44-83DB-08312D4C6E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47E494A6-871D-4F44-83DB-08312D4C6E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47E494A6-871D-4F44-83DB-08312D4C6E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49132BB5-5C34-44FE-8C57-14715B5A8AAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
