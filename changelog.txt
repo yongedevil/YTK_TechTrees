@@ -1,3 +1,6 @@
+1.5.1.1
+	Removed the RDIcon and Treeconvertor dlls from release
+
 1.5.1
 	Moved DLLs into Plugin directory
 	Moved PluginData into the Plugins directory
