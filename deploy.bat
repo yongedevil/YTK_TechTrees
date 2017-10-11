@@ -1,7 +1,7 @@
 
 rem @echo off
 
-set H=R:\KSP_1.3.0_dev
+set H=R:\KSP_1.3.1_dev
 set GAMEDIR=YongeTech_TechTreesPlugin
 
 echo %H%

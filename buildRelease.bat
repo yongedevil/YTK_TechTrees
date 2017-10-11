@@ -3,7 +3,6 @@
 
 rem Set variables here
 
-set H=R:\KSP_1.3.0_dev
 set GAMEDIR=YongeTech_TechTreesPlugin
 set LICENSE=LICENSE
 set README=ReadMe.md
