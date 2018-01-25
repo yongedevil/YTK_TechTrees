@@ -14,7 +14,7 @@ namespace YongeTechKerbal
     {
         public string title;
         public string url;
-        public string desctription;
+        public string description;
 
         public int totalCost;
         public int numNodes;
@@ -26,7 +26,7 @@ namespace YongeTechKerbal
         {
             this.title = title;
             this.url = url;
-            this.desctription = description;
+            this.description = description;
 
             totalCost = 0;
             numNodes = 0;
@@ -179,53 +179,49 @@ namespace YongeTechKerbal
             string description;
 
             //Traverse through game configs looking for TechTree configs
-            foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.AllConfigs)
+            //foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.AllConfigs)
+            foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.GetConfigs("TechTree"))
             {
-                isStock = false; 
-
-                if ("TechTree" == config.name)
-                {
+                isStock = false;
 #if DEBUG
-                    Debug.Log("YT_TechTreesScenario.LoadTechTreeData: found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
+                Debug.Log("YT_TechTreesScenario.LoadTechTreeData: found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
 #endif
-                    node = config.config;
-                    url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
+                node = config.config;
+                url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
 
-                    //Check if this is the stock tree
-                    //use stock tree title and description loaded from mod config file if it is
-                    if (url == YT_TechTreesSettings.Instance.StockTree_url)
-                    {
-                        isStock = true;
-                        title = YT_TechTreesSettings.Instance.StockTree_title;
-                        description = YT_TechTreesSettings.Instance.StockTree_description;
-                    }
-
-                    //If not stock tree attempt to read title and description from the TechTree ConfigNode
-                    //if they can't be read default values are used instead
-                    else
-                    {
-                        if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE))
-                            title = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE);
-                        else
-                            title = "(" + config.parent.url + ")";
-
-                        if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION))
-                            description = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION);
-                        else
-                            description = "No description available.";
-                    }
-
-                    //create YT_TreeDeclaration and add stats
-                    YT_TreeDeclaration treeData = new YT_TreeDeclaration(title, url, description);
-                    CalculateTechTreeStats(node, treeData);
-
-
-                    //Add information to treeDeclarationList
-                    if (isStock)
-                        m_techTrees.Insert(0, treeData);
-                    else
-                        m_techTrees.Add(treeData);
+                //Check if this is the stock tree
+                //use stock tree title and description loaded from mod config file if it is
+                if (url == YT_TechTreesSettings.Instance.StockTree_url)
+                {
+                    isStock = true;
+                    title = YT_TechTreesSettings.Instance.StockTree_title;
+                    description = YT_TechTreesSettings.Instance.StockTree_description;
                 }
+
+                //If not stock tree attempt to read title and description from the TechTree ConfigNode
+                //if they can't be read default values are used instead
+                else
+                {
+                    if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE))
+                        title = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE);
+                    else
+                        title = "(" + config.parent.url + ")";
+
+                    if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION))
+                        description = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION);
+                    else
+                        description = "No description available.";
+                }
+
+                //create YT_TreeDeclaration and add stats
+                YT_TreeDeclaration treeData = new YT_TreeDeclaration(title, url, description);
+                CalculateTechTreeStats(node, treeData);
+
+                //Add information to treeDeclarationList
+                if (isStock)
+                    m_techTrees.Insert(0, treeData);
+                else
+                    m_techTrees.Add(treeData);
             }
         }
 

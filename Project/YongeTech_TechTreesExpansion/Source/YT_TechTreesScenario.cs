@@ -196,7 +196,18 @@ namespace YongeTechKerbal
             \********************************************/
             try
             {
-                techtreeNode = ConfigNode.Load(treeURL).GetNode("TechTree");
+                //The commented out line loads the tech tree before it is modified by Module Manager.
+                //The loop ensures the Module Manager changes to the unlocks are loaded.
+
+                //techtreeNode = ConfigNode.Load(treeURL).GetNode("TechTree");
+                foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.GetConfigs("TechTree"))
+                {
+                    if("GameData/" + config.parent.url + "." + config.parent.fileExtension == treeURL)
+                    {
+                        techtreeNode = config.config;
+                        break;
+                    }
+                }
             }
             catch(NullReferenceException)
             {

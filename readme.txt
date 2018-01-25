@@ -1,5 +1,5 @@
 YongeTech Tech Trees Plugin
-version: 1.4
+version: 1.5
 author: yongedevil  
 ============================
 
@@ -33,7 +33,7 @@ Copy the contents of GameData into the Kerbal GameData folder.
 
   2.1 Known Issues:
   -----------------
-  This mod tracks parts by their name field.  This means if two parts have the same name, only the first will be editied.
+  This mod tracks parts by their name field.  This means if two parts have the same name, only the first will be edited.  
 
   2.2  Install Options:
   ---------------------

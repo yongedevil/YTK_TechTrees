@@ -16,23 +16,13 @@ Copy the contents of GameData into the Kerbal GameData folder.
 
 This mod tracks parts by their name field. This means it does not work properly when multiple parts have the same name.
 
-Both this mod and ModuleManager (on version 2.6.5 as of this writing) attempt to edit the tech tree of the current game.  This mod's changes should have priority.
-
-If you would like to disable the option to select a tech tree and the conflict with ModuleManager change the "allowTreeSelection" field in PluginData/YongeTech_TechTreesExpansion/config.xml from '1' to '0'.  This will keep support for the TechTree ConfigNode additions and custom icon support, but remove the option to select a tech tree.
+If you would like to disable the option to select a tech tree, change the "allowTreeSelection" field in PluginData/YongeTech_TechTreesExpansion/config.xml from '1' to '0'.  This will keep support for the TechTree ConfigNode additions and custom icon support, but remove the option to select a tech tree.
 
 ***
 Creating a Tech Tree:
 ---------------------
 The mod adds new support to the TechTree ConfigNode and will create icons for use in a tech tree from custom textures.
 
-[YongeTech Tech Tree Converter](https://github.com/yongedevil/YTK_TechTrees/releases/tag/v1.0-converter) helps convert existing tech trees by filling in the Unlocks nodes for all techs.  It will add all parts that:
-
- * have a TechRequired of that node.
- * are not listed in another tech node's Unlock section.
- 
-It writes the filled out TechTree to a txt file in the mod's directory.  It cannot differentiate between active and inactive trees and so it performs this conversion for all TechTrees installed, and it also dose not name the output files in any meaningful way.  It is necessary to inspect the output files to locate the correct tree and then add the *title* and *description* fields to it.
- 
- 
 #### TechTree ConfigNode:
 The mod adds support for new fields and a new subnode in the TechTree ConfigNode.  Shown below is a sample TechTree node showing the new fields.
 
@@ -44,6 +34,7 @@ The mod adds support for new fields and a new subnode in the TechTree ConfigNode
 
 	  RDNode
 	  {
+		name = start
         ...
         Unlocks
         {
@@ -65,6 +56,10 @@ The mod adds support for new fields and a new subnode in the TechTree ConfigNode
 *description:* Single paragraph description of the tree for the player.  Displayed in the tech tree selection window when starting a new game. (approximately a 400 character limit)
 
 *unlockAllStartParts:* If True the mod will automatically unlock all parts in the starting tech node(s), which are any tech nodes with a cost of 0.  This is only relevant if No Entry Purchase Required on Research is disabled in difficulty settings.
+
+**RDNode:**
+
+The RDNode is the same as for the stock game's tech trees.  Adding a *name* field will allow ModuleManager edits to easily add parts to this RDNode's Unlock node.
 
 **Unlocks Node:**
 
