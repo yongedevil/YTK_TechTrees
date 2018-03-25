@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		..\buildRelease.bat = ..\buildRelease.bat
 		..\changelog.txt = ..\changelog.txt
 		..\deploy.bat = ..\deploy.bat
+		..\jenkins.txt = ..\jenkins.txt
 		..\kerbalstuff.txt = ..\kerbalstuff.txt
 		..\readme.md = ..\readme.md
 		..\YongeTech_TechTreesPlugin.version = ..\YongeTech_TechTreesPlugin.version
