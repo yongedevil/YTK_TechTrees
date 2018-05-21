@@ -52,6 +52,7 @@ namespace YongeTechKerbal
 
         public const string RDNode_UNLOCKSNODE_NAME = "Unlocks";
         public const string RDNode_UNLOCKSNODE_FIELD_PART = "part";
+        public const string RDNode_UNLOCKSNODE_FIELD_PARTUPGRADE = "partupgrade";
 
 
         //TechTreesScenario settings

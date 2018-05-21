@@ -57,8 +57,20 @@ namespace YongeTechKerbal
             }
         }
 
-        //dictionary of starting techRequired
-        private Dictionary<string, string> m_origonalTechRequired;
+        //dictionaries of origonal techRequired
+        //first string is part or upgrade name
+        //second string is TechRequired
+        private Dictionary<string, string> m_part_origonalTechRequired;
+        private Dictionary<string, string> m_upgrade_origonalTechRequired;
+
+        public Dictionary<string, string> Part_OrigonalTechRequired
+        {
+            get { return m_part_origonalTechRequired; }
+        }
+        public Dictionary<string, string> Upgrade_OrigonalTechRequired
+        {
+            get { return m_upgrade_origonalTechRequired; }
+        }
 
 
         /************************************************************************\
@@ -67,61 +79,58 @@ namespace YongeTechKerbal
         \************************************************************************/
         private YT_TechRequiredDatabase()
         {
-            m_origonalTechRequired = new Dictionary<string, string>();
-            LoadTechRequiredData();
+            m_part_origonalTechRequired = new Dictionary<string, string>();
+            m_upgrade_origonalTechRequired = new Dictionary<string, string>();
+            //LoadTechRequiredData();
         }
-
 
         /************************************************************************\
          * YT_TechRequiredDatabase class                                        *
-         * CreateDatabase function                                              *
+         * CheckAndAddPart function                                             *
          *                                                                      *
-         * Reads and stores the origonal TechRequired from all parts.           *
+         * If partName is not already in the database it is added.              *
         \************************************************************************/
-        private void LoadTechRequiredData()
+        public void CheckAndAddPart(string partName, string techRequired)
         {
 #if DEBUG
-            Debug.Log("YT_TechRequiredDatabase.CreateDatabase");
+            Debug.Log("YT_TechRequiredDatabase.CheckAndAddPart");
 #endif
-            foreach (AvailablePart part in PartLoader.LoadedPartsList)
+            if (! m_part_origonalTechRequired.ContainsKey(partName))
             {
-                //Store the TechRequired from the origonal config file with the name of the part
                 try
                 {
-                    m_origonalTechRequired.Add(part.name, part.TechRequired);
+                    m_part_origonalTechRequired.Add(partName, techRequired);
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
-                    Debug.Log("YT_TechRequiredDatabase.CreateDatabase: ERROR part with the same name already exisits " + part.name);
+                    Debug.Log("YT_TechRequiredDatabase.CheckAndAddPart: ERROR part with the same name already exisits " + partName);
                 }
             }
         }
-
-
         /************************************************************************\
          * YT_TechRequiredDatabase class                                        *
-         * GetOrigonalTechID function                                           *
+         * CheckAndAddUpgrade function                                          *
          *                                                                      *
-         * Attempt to get the origonal TechRequired for the specified part.     *
-         * Returns:                                                             *
-         *   techID of the origonal TechRequired for the part.                  *
-         *   null if partName not found in the database.                        *
+         * If upgradName is not already in the database it is added.            *
         \************************************************************************/
-        public string GetOrigonalTechID(string partName)
+        public void CheckAndAddUpgrade(string upgradName, string techRequired)
         {
 #if DEBUG
-            Debug.Log("YT_TechRequiredDatabase.GetOrigonalTechID");
+            Debug.Log("YT_TechRequiredDatabase.CheckAndAddUpgrade");
 #endif
-            string techID = null;
-
-            if (!m_origonalTechRequired.TryGetValue(partName, out techID))
+            if (! m_upgrade_origonalTechRequired.ContainsKey(upgradName))
             {
-                techID = null;
-                Debug.Log("YT_TechRequiredDatabase.GetOrigonalTechID: WARNING " + partName + " not found in database");
+                try
+                {
+                    m_upgrade_origonalTechRequired.Add(upgradName, techRequired);
+                }
+                catch (ArgumentException)
+                {
+                    Debug.Log("YT_TechRequiredDatabase.CheckAndAddUpgrade: ERROR part upgrade with the same name already exisits " + upgradName);
+                }
             }
-
-            return techID;
         }
+
     } //END of YT_TechRequiredDatabase
     
 
@@ -179,7 +188,6 @@ namespace YongeTechKerbal
             string description;
 
             //Traverse through game configs looking for TechTree configs
-            //foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.AllConfigs)
             foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.GetConfigs("TechTree"))
             {
                 isStock = false;
