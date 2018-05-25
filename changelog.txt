@@ -10,6 +10,7 @@
 	- Fixed bug where Module Manager changes to the Unlocks were not loaded.
 
 	Updated .version
+	Added Jenkins config/build
 
 
 1.5.2
