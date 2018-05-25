@@ -27,7 +27,7 @@
 1:YongeTech_TechTreesPlugin, YongeTech_TechTreesPlugin.version, YTK_TechTrees
 
 # 2:PROJNAME, PROJFILE, VERSIONFILE, PLUGINSFOLDER
-2:YongeTech_TechTreesPlugin,Project/YongeTech_TechTreesPlugin.csproj,YongeTech_TechTreesPlugin.version,GameData/YongeTech_TechTreesPlugin/Plugins
+2:YongeTech_TechTreesPlugin,Project/YongeTech_TechTreesExpansion/YongeTech_TechTreesExpansion.csproj,YongeTech_TechTreesPlugin.version,GameData/YongeTech_TechTreesPlugin/Plugins
 
 # 3:SOURCEFILE, DESTDIR
 3:YongeTech_TechTreesPlugin.version,GameData/YongeTech_TechTreesPlugin
