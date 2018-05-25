@@ -28,7 +28,7 @@
 	int i2 = 0;
 	string s;
 
-	string versionfile =  @"D:\Users\jbb\github\KaptainsLog\KaptainsLog.version";
+	string versionfile =  @"D:\Users\jbb\github\YTK_TechTrees\YongeTech_TechTreesPlugin.version";
 	if (!File.Exists(versionfile))
 	{
 		Write("File: " + versionfile + " missing\n");		
