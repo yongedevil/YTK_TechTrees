@@ -14,7 +14,7 @@ namespace YongeTechKerbal
     {
         public string title;
         public string url;
-        public string desctription;
+        public string description;
 
         public int totalCost;
         public int numNodes;
@@ -26,7 +26,7 @@ namespace YongeTechKerbal
         {
             this.title = title;
             this.url = url;
-            this.desctription = description;
+            this.description = description;
 
             totalCost = 0;
             numNodes = 0;
@@ -57,8 +57,20 @@ namespace YongeTechKerbal
             }
         }
 
-        //dictionary of starting techRequired
-        private Dictionary<string, string> m_origonalTechRequired;
+        //dictionaries of origonal techRequired
+        //first string is part or upgrade name
+        //second string is TechRequired
+        private Dictionary<string, string> m_part_origonalTechRequired;
+        private Dictionary<string, string> m_upgrade_origonalTechRequired;
+
+        public Dictionary<string, string> Part_OrigonalTechRequired
+        {
+            get { return m_part_origonalTechRequired; }
+        }
+        public Dictionary<string, string> Upgrade_OrigonalTechRequired
+        {
+            get { return m_upgrade_origonalTechRequired; }
+        }
 
 
         /************************************************************************\
@@ -67,61 +79,58 @@ namespace YongeTechKerbal
         \************************************************************************/
         private YT_TechRequiredDatabase()
         {
-            m_origonalTechRequired = new Dictionary<string, string>();
-            LoadTechRequiredData();
+            m_part_origonalTechRequired = new Dictionary<string, string>();
+            m_upgrade_origonalTechRequired = new Dictionary<string, string>();
+            //LoadTechRequiredData();
         }
-
 
         /************************************************************************\
          * YT_TechRequiredDatabase class                                        *
-         * CreateDatabase function                                              *
+         * CheckAndAddPart function                                             *
          *                                                                      *
-         * Reads and stores the origonal TechRequired from all parts.           *
+         * If partName is not already in the database it is added.              *
         \************************************************************************/
-        private void LoadTechRequiredData()
+        public void CheckAndAddPart(string partName, string techRequired)
         {
 #if DEBUG
-            Log.Info("YT_TechRequiredDatabase.CreateDatabase");
+            Log.Info("YT_TechRequiredDatabase.CheckAndAddPart");
 #endif
-            foreach (AvailablePart part in PartLoader.LoadedPartsList)
+            if (! m_part_origonalTechRequired.ContainsKey(partName))
             {
-                //Store the TechRequired from the origonal config file with the name of the part
                 try
                 {
-                    m_origonalTechRequired.Add(part.name, part.TechRequired);
+                    m_part_origonalTechRequired.Add(partName, techRequired);
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
-                    Log.Info("YT_TechRequiredDatabase.CreateDatabase: ERROR part with the same name already exisits " + part.name);
+                    Log.Info("YT_TechRequiredDatabase.CreateDatabase: ERROR part with the same name already exisits " + partName);
                 }
             }
         }
-
-
         /************************************************************************\
          * YT_TechRequiredDatabase class                                        *
-         * GetOrigonalTechID function                                           *
+         * CheckAndAddUpgrade function                                          *
          *                                                                      *
-         * Attempt to get the origonal TechRequired for the specified part.     *
-         * Returns:                                                             *
-         *   techID of the origonal TechRequired for the part.                  *
-         *   null if partName not found in the database.                        *
+         * If upgradName is not already in the database it is added.            *
         \************************************************************************/
-        public string GetOrigonalTechID(string partName)
+        public void CheckAndAddUpgrade(string upgradName, string techRequired)
         {
 #if DEBUG
-            Log.Info("YT_TechRequiredDatabase.GetOrigonalTechID");
+            Log.Info("YT_TechRequiredDatabase.CheckAndAddUpgrade");
 #endif
-            string techID = null;
-
-            if (!m_origonalTechRequired.TryGetValue(partName, out techID))
+            if (! m_upgrade_origonalTechRequired.ContainsKey(upgradName))
             {
-                techID = null;
-                Log.Info("YT_TechRequiredDatabase.GetOrigonalTechID: WARNING " + partName + " not found in database");
+                try
+                {
+                    m_upgrade_origonalTechRequired.Add(upgradName, techRequired);
+                }
+                catch (ArgumentException)
+                {
+                    Log.Info("YT_TechRequiredDatabase.CheckAndAddUpgrade: ERROR part upgrade with the same name already exisits " + upgradName);
+                }
             }
-
-            return techID;
         }
+
     } //END of YT_TechRequiredDatabase
     
 
@@ -179,53 +188,48 @@ namespace YongeTechKerbal
             string description;
 
             //Traverse through game configs looking for TechTree configs
-            foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.AllConfigs)
+            foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.GetConfigs("TechTree"))
             {
-                isStock = false; 
-
-                if ("TechTree" == config.name)
-                {
+                isStock = false;
 #if DEBUG
                     Log.Info("YT_TechTreesScenario.LoadTechTreeData: found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
 #endif
-                    node = config.config;
-                    url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
+                node = config.config;
+                url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;
 
-                    //Check if this is the stock tree
-                    //use stock tree title and description loaded from mod config file if it is
-                    if (url == YT_TechTreesSettings.Instance.StockTree_url)
-                    {
-                        isStock = true;
-                        title = YT_TechTreesSettings.Instance.StockTree_title;
-                        description = YT_TechTreesSettings.Instance.StockTree_description;
-                    }
-
-                    //If not stock tree attempt to read title and description from the TechTree ConfigNode
-                    //if they can't be read default values are used instead
-                    else
-                    {
-                        if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE))
-                            title = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE);
-                        else
-                            title = "(" + config.parent.url + ")";
-
-                        if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION))
-                            description = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION);
-                        else
-                            description = "No description available.";
-                    }
-
-                    //create YT_TreeDeclaration and add stats
-                    YT_TreeDeclaration treeData = new YT_TreeDeclaration(title, url, description);
-                    CalculateTechTreeStats(node, treeData);
-
-
-                    //Add information to treeDeclarationList
-                    if (isStock)
-                        m_techTrees.Insert(0, treeData);
-                    else
-                        m_techTrees.Add(treeData);
+                //Check if this is the stock tree
+                //use stock tree title and description loaded from mod config file if it is
+                if (url == YT_TechTreesSettings.Instance.StockTree_url)
+                {
+                    isStock = true;
+                    title = YT_TechTreesSettings.Instance.StockTree_title;
+                    description = YT_TechTreesSettings.Instance.StockTree_description;
                 }
+
+                //If not stock tree attempt to read title and description from the TechTree ConfigNode
+                //if they can't be read default values are used instead
+                else
+                {
+                    if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE))
+                        title = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_TITLE);
+                    else
+                        title = "(" + config.parent.url + ")";
+
+                    if (node.HasValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION))
+                        description = node.GetValue(YT_TechTreesSettings.TECHTREE_FIELD_DESCRIPTION);
+                    else
+                        description = "No description available.";
+                }
+
+                //create YT_TreeDeclaration and add stats
+                YT_TreeDeclaration treeData = new YT_TreeDeclaration(title, url, description);
+                CalculateTechTreeStats(node, treeData);
+
+                //Add information to treeDeclarationList
+                if (isStock)
+                    m_techTrees.Insert(0, treeData);
+                else
+                    m_techTrees.Add(treeData);
             }
         }
 

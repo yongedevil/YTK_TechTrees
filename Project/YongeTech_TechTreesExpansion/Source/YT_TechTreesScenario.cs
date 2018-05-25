@@ -196,7 +196,18 @@ namespace YongeTechKerbal
             \********************************************/
             try
             {
-                techtreeNode = ConfigNode.Load(treeURL).GetNode("TechTree");
+                //The commented out line loads the tech tree before it is modified by Module Manager.
+                //The loop ensures the Module Manager changes to the unlocks are loaded.
+
+                //techtreeNode = ConfigNode.Load(treeURL).GetNode("TechTree");
+                foreach (UrlDir.UrlConfig config in GameDatabase.Instance.root.GetConfigs("TechTree"))
+                {
+                    if("GameData/" + config.parent.url + "." + config.parent.fileExtension == treeURL)
+                    {
+                        techtreeNode = config.config;
+                        break;
+                    }
+                }
             }
             catch(NullReferenceException)
             {
@@ -224,11 +235,12 @@ namespace YongeTechKerbal
             int nodeCost = 0;
             string techID = null;
             List<string> partNamesList = new List<string>();
+            List<string> upgradeNamesList = new List<string>();
 
             /************************************\
              * Check passed arguments are valid *
             \************************************/
-            if(null == techtreeNode)
+            if (null == techtreeNode)
             {
                 Log.Info("YT_TechTreesScenario.ApplyTechTreeChanges: ERROR techtreeNode node is null");
                 return;
@@ -260,9 +272,10 @@ namespace YongeTechKerbal
 #endif
 
                 //Create list of parts unlocked by this technode (the Parts subnode is a custom addition to the RDNode)
-                //Eddit parts so their TechRequired matches this node
+                //Edit parts so their TechRequired matches this node
                 partNamesList = GeneratePartNamesList(RDNode);
-                ChangeTechRequired(partNamesList, techID);
+                upgradeNamesList = GenerateUpgradeNamesList(RDNode);
+                ChangeTechRequired(partNamesList, upgradeNamesList, techID);
 
             }
             
@@ -325,16 +338,19 @@ namespace YongeTechKerbal
          * ResetTechRequired function                                           *
          *                                                                      *
          * Resets TechRequired for all parts to their defaults.                 *
+         * Resets TechRequired for all part upgrades to their defaults.         *
         \************************************************************************/
         private void ResetTechRequired()
         {
-            string techID = null;
-
-            foreach (AvailablePart part in PartLoader.LoadedPartsList)
+#if DEBUG
+            Debug.Log("YT_TechTreesScenario.ResetTechRequired");
+#endif
+            foreach (KeyValuePair<string, string> partData in YT_TechRequiredDatabase.Instance.Part_OrigonalTechRequired)
             {
 #if DEBUG
-                Log.Info("YT_TechTreesScenario.ResetTechRequired: looking at: " + part.name);
+                Log.Info("YT_TechTreesScenario.ResetTechRequired: looking at: " + partData.Key);
 #endif
+#if false
                 /****************************************************\
                  * Get TechRequired from the TechRequiredDatabas    *
                  * Check successful                                 *
@@ -344,9 +360,21 @@ namespace YongeTechKerbal
                     Log.Info("YT_TechTreesScenario.ResetTechRequired: WARNING did not find origonal TechRequired for " + part.name);
                     continue;
                 }
+#else
+                PartLoader.getPartInfoByName(partData.Key).TechRequired = partData.Value;
+            }
+#endif
 
-                //Assign the TechRequired from the origonal config file to the part
-                part.TechRequired = techID;
+            foreach(KeyValuePair<string, string> upgradeData in YT_TechRequiredDatabase.Instance.Upgrade_OrigonalTechRequired)
+            {
+#if DEBUG
+                Debug.Log("YT_TechTreesScenario.ResetTechRequired: looking at: " + upgradeData.Key);
+#endif
+                PartUpgradeHandler.Upgrade upgrade = PartUpgradeManager.Handler.GetUpgrade(upgradeData.Key);
+        
+                PartUpgradeManager.Handler.RemoveUpgrade(upgradeData.Key);
+                upgrade.techRequired = upgradeData.Value;
+                PartUpgradeManager.Handler.AddUpgrade(upgrade);
             }
         }
 
@@ -381,6 +409,39 @@ namespace YongeTechKerbal
 #endif
 
             return partNamesList;
+        }
+
+        /************************************************************************\
+         * YT_TechTreesScenario class                                           *
+         * GenerateUpgradeNamesList function                                    *
+         *                                                                      *
+         * Returns a list of part upgrade names for parts unlocked by the given *
+         * RDNode.                                                              *
+        \************************************************************************/
+        private List<string> GenerateUpgradeNamesList(ConfigNode RDNode)
+        {
+#if DEBUG
+            Debug.Log("YT_TechTreesScenario.GenerateUpgradeNamesList");
+#endif
+            List<string> upgradeNamesList = new List<string>();
+            ConfigNode unlocksNode = null;
+
+            if (null != (unlocksNode = RDNode.GetNode(YT_TechTreesSettings.RDNode_UNLOCKSNODE_NAME)))
+            {
+                foreach (string upgradeName in unlocksNode.GetValues(YT_TechTreesSettings.RDNode_UNLOCKSNODE_FIELD_PARTUPGRADE))
+                {
+                    //replace _ with . to match the internal format of the game
+                    upgradeNamesList.Add(upgradeName.Replace("_", "."));
+                }
+            }
+#if DEBUG
+            string upgradeNames = "";
+            foreach (string upgradeName in upgradeNamesList)
+                upgradeNames += upgradeName + "\n";
+            Debug.Log("YT_TechTreesScenario.GenerateUpgradeNamesList: generated upgradeNamesList for " + RDNode.GetValue("id") + ":\n" + upgradeNames);
+#endif
+
+            return upgradeNamesList;
         }
 
 
@@ -483,9 +544,15 @@ namespace YongeTechKerbal
          * YT_TechTreesScenario class                                           *
          * ChangeTechRequired function                                          *
          *                                                                      *
+         * Passes the current TechRequired for the parts and upgrades to the    *
+         * YT_TechRequiredDatabase (if this is the first time editing the       *
+         * part/upgrade then the TechRequired will be saved).                   *
+         *                                                                      *
          * Edits the TechRequired for the parts in partNamesList to be techID.  *
+         * Edits the TechRequired for the part upgrades in upgradeNamesList to  *
+         * be techID.                                                           *
         \************************************************************************/
-        private void ChangeTechRequired(List<string> partNamesList, string techID)
+        private void ChangeTechRequired(List<string> partNamesList, List<string> upgradeNamesList, string techID)
         {
 #if DEBUG
             Log.Info("YT_TechTreesScenario.ChangeTechRequired");
@@ -497,7 +564,12 @@ namespace YongeTechKerbal
 #endif
                 try
                 {
-                    PartLoader.getPartInfoByName(partName).TechRequired = techID;
+                    AvailablePart apart = PartLoader.getPartInfoByName(partName);
+
+                    //Save the origonal TechRequired to the YT_TechRequiredDatabase
+                    YT_TechRequiredDatabase.Instance.CheckAndAddPart(partName, apart.TechRequired);
+                    //Update TechRequired to the new techID
+                    apart.TechRequired = techID;
                 }
                 catch (NullReferenceException)
                 {
@@ -505,6 +577,22 @@ namespace YongeTechKerbal
                     Log.Info("YT_TechTreesScenario.ChangeTechRequired: WARNING part " + partName + " not found in PartLoader.");
 #endif
                 }
+            }
+
+            foreach(string upgradeName in upgradeNamesList)
+            {
+#if DEBUG
+                Debug.Log("YT_TechTreesScenario.ChangeTechRequired: editing " + upgradeName + " to require " + techID);
+#endif
+                //Save the origonal TechRequired to the YT_TechRequiredDatabase
+                YT_TechRequiredDatabase.Instance.CheckAndAddUpgrade(upgradeName, PartUpgradeManager.Handler.GetUpgrade(upgradeName).techRequired);
+
+                //Just updating the techRequired field on the upgrade does not apper to work
+                //So save the upgrade and remove then re-add it to the manager.
+                PartUpgradeHandler.Upgrade upgrade = PartUpgradeManager.Handler.GetUpgrade(upgradeName);
+                PartUpgradeManager.Handler.RemoveUpgrade(upgradeName);
+                upgrade.techRequired = techID;
+                PartUpgradeManager.Handler.AddUpgrade(upgrade);
             }
         }
 
