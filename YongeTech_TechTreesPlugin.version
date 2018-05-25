@@ -1,15 +1,30 @@
 {
   "NAME": "YongTechTreesPlugin",
   "URL": "https://raw.githubusercontent.com/linuxgurugamer/YTK_TechTrees/master/YongeTech_TechTreesPlugin.version",
+    "DOWNLOAD": "http://spacedock.info/mod/613/KerbalSlingshotter",
+  "GITHUB": {
+    "USERNAME": "linuxgurugamer",
+    "REPOSITORY": "KerbalSlingshotter"
+  },
   "VERSION": {
-    "MAJOR": 0,
-    "MINOR": 5,
-    "PATCH": 2,
-    "BUILD": 1
+    "MAJOR": 1,
+    "MINOR": 6,
+    "PATCH": 1,
+    "BUILD": 0
   },
   "KSP_VERSION": {
     "MAJOR": 1,
     "MINOR": 4,
     "PATCH": 1
+  },
+  "KSP_VERSION_MIN": {
+    "MAJOR": 1,
+    "MINOR": 4,
+    "PATCH": 1
+  },
+  "KSP_VERSION_MAX": {
+    "MAJOR": 1,
+    "MINOR": 4,
+    "PATCH": 99
   }
 }
