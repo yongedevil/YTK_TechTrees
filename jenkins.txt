@@ -24,7 +24,7 @@
 # 0:1.3
 
 # 1:GAMEDIR, VERSIONFILE [, GITHUBREPO ]
-1:YTK_TechTrees, YongeTech_TechTreesPlugin.version, YongeTech_TechTreesPlugin
+1:YongeTech_TechTreesPlugin, YongeTech_TechTreesPlugin.version, YTK_TechTrees
 
 # 2:PROJNAME, PROJFILE, VERSIONFILE, PLUGINSFOLDER
 2:YongeTech_TechTreesPlugin,Project/YongeTech_TechTreesPlugin.csproj,YongeTech_TechTreesPlugin.version,GameData/YongeTech_TechTreesPlugin/Plugins
