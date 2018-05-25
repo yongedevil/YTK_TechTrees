@@ -1,10 +1,10 @@
 {
   "NAME": "YongTechTreesPlugin",
   "URL": "https://raw.githubusercontent.com/linuxgurugamer/YTK_TechTrees/master/YongeTech_TechTreesPlugin.version",
-    "DOWNLOAD": "http://spacedock.info/mod/613/KerbalSlingshotter",
+    "DOWNLOAD": "https://github.com/linuxgurugamer/YTK_TechTrees/releases",
   "GITHUB": {
     "USERNAME": "linuxgurugamer",
-    "REPOSITORY": "KerbalSlingshotter"
+    "REPOSITORY": "YTK_TechTrees"
   },
   "VERSION": {
     "MAJOR": 1,
