@@ -1,3 +1,15 @@
+1.6.1
+	Merged in changes from original author:
+	v1.6
+	- Updated for Kerbal 1.4.3
+	- Added support to edit the techRequired field for PARTUPGRADE nodes
+
+	v1.5 
+	- Updated for Kerbal 1.3.1
+	- Fixed bug where tech trees with a name field were not being loaded.
+	- Fixed bug where Module Manager changes to the Unlocks were not loaded.
+
+
 1.5.2
 	Updated for KSp 1.3.1
 

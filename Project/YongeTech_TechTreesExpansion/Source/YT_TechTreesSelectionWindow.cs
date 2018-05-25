@@ -352,7 +352,7 @@ namespace YongeTechKerbal
             stats += "\n  Tier 2 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level2;
             stats += "\n  Tier 3 Nodes: " + m_techTrees[m_choiceIndex].numNodes_level3;
 
-            GUI.Box(m_treeDetailsRect, m_techTrees[m_choiceIndex].desctription, m_textAreaStyle);
+            GUI.Box(m_treeDetailsRect, m_techTrees[m_choiceIndex].description, m_textAreaStyle);
 
             GUI.TextArea(m_treeStatsHeaderRect, "Tree Stats", m_textAreaHeaderStyle);
 
