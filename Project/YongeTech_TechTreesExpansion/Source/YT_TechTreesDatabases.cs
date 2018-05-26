@@ -92,7 +92,7 @@ namespace YongeTechKerbal
         public void CheckAndAddPart(string partName, string techRequired)
         {
 #if DEBUG
-            Debug.Log("YT_TechRequiredDatabase.CheckAndAddPart");
+            Log.Info("YT_TechRequiredDatabase.CheckAndAddPart");
 #endif
             if (! m_part_origonalTechRequired.ContainsKey(partName))
             {
@@ -102,7 +102,7 @@ namespace YongeTechKerbal
                 }
                 catch (ArgumentException)
                 {
-                    Debug.Log("YT_TechRequiredDatabase.CheckAndAddPart: ERROR part with the same name already exisits " + partName);
+                    Log.Info("YT_TechRequiredDatabase.CreateDatabase: ERROR part with the same name already exisits " + partName);
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace YongeTechKerbal
         public void CheckAndAddUpgrade(string upgradName, string techRequired)
         {
 #if DEBUG
-            Debug.Log("YT_TechRequiredDatabase.CheckAndAddUpgrade");
+            Log.Info("YT_TechRequiredDatabase.CheckAndAddUpgrade");
 #endif
             if (! m_upgrade_origonalTechRequired.ContainsKey(upgradName))
             {
@@ -125,7 +125,7 @@ namespace YongeTechKerbal
                 }
                 catch (ArgumentException)
                 {
-                    Debug.Log("YT_TechRequiredDatabase.CheckAndAddUpgrade: ERROR part upgrade with the same name already exisits " + upgradName);
+                    Log.Info("YT_TechRequiredDatabase.CheckAndAddUpgrade: ERROR part upgrade with the same name already exisits " + upgradName);
                 }
             }
         }
@@ -178,7 +178,7 @@ namespace YongeTechKerbal
         private void LoadTechTreeData()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreesScenario.LoadModData");
+            Log.Info("YT_TechTreesScenario.LoadModData");
 #endif
             bool isStock = false;
             ConfigNode node;
@@ -191,7 +191,7 @@ namespace YongeTechKerbal
             {
                 isStock = false;
 #if DEBUG
-                Debug.Log("YT_TechTreesScenario.LoadTechTreeData: found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
+                    Log.Info("YT_TechTreesScenario.LoadTechTreeData: found TechTree Config url = GameData/" + config.parent.url + "." + config.parent.fileExtension);
 #endif
                 node = config.config;
                 url = "GameData/" + config.parent.url + "." + config.parent.fileExtension;

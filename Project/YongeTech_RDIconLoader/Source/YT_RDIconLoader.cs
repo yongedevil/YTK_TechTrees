@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using KSP;
 using RUI.Icons.Simple;
+using YongeTechKerbal;
 
 namespace YongeTechKerbal
 {
@@ -35,7 +36,7 @@ namespace YongeTechKerbal
         public void Awake()
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.Awake");
+            Log.Info("YT_RDIconLoader.Awake");
 #endif
             DontDestroyOnLoad(this);
 
@@ -52,7 +53,7 @@ namespace YongeTechKerbal
         public void Start()
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.Start");
+            Log.Info("YT_RDIconLoader.Start");
 #endif
             ReadConfigFile();
 
@@ -66,12 +67,12 @@ namespace YongeTechKerbal
                     foreach (UrlDir.UrlFile file in dir.files)
                     {
 #if DEBUG
-                        Debug.Log("YT_RDIconLoader.Start: looking at file " + file.name + "." + file.fileExtension);
+                        Log.Info("YT_RDIconLoader.Start: looking at file " + file.name + "." + file.fileExtension);
 #endif
                         if ("png" == file.fileExtension || "tga" == file.fileExtension || "dds" == file.fileExtension)
                         {
 #if DEBUG
-                            Debug.Log("YT_RDIconLoader.Start: adding file to iconDataList");
+                            Log.Info("YT_RDIconLoader.Start: adding file to iconDataList");
 #endif
                             m_iconDataList.Add(new YT_IconData(file.name, file.url));
                         }
@@ -90,7 +91,7 @@ namespace YongeTechKerbal
         private void ReadConfigFile()
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.ReadConfigFile");
+            Log.Info("YT_RDIconLoader.ReadConfigFile");
 #endif
             //Read Mod Configuration File
             KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_RDIconLoader>();
@@ -100,7 +101,7 @@ namespace YongeTechKerbal
 #if DEBUG
             string values = "";
             values += "RDIconFolder = " + RDIconFolder_name + "\n";
-            Debug.Log("YT_RDIconLoader.ReadConfigFile: values\n" + values);
+            Log.Info("YT_RDIconLoader.ReadConfigFile: values\n" + values);
 #endif
         }
 
@@ -113,7 +114,7 @@ namespace YongeTechKerbal
         public void Update()
         {
 #if DEBUG_UPDATE
-            Debug.Log("YT_RDIconLoader.Update()");
+            Log.Info("YT_RDIconLoader.Update()");
 #endif
             IconLoader iconLoader = FindObjectOfType<IconLoader>();
             if (null != iconLoader)
@@ -131,7 +132,7 @@ namespace YongeTechKerbal
         private void LoadIcons(IconLoader iconLoader)
         {
 #if DEBUG
-            Debug.Log("YT_RDIconLoader.LoadIcons");
+            Log.Info("YT_RDIconLoader.LoadIcons");
 #endif
             Icon customIcon;
 
@@ -139,7 +140,7 @@ namespace YongeTechKerbal
             foreach (YT_IconData iconData in m_iconDataList)
             {
 #if DEBUG
-                Debug.Log("YT_RDIconLoader.LoadIcons: loading " + iconData.name);
+                Log.Info("YT_RDIconLoader.LoadIcons: loading " + iconData.name);
 #endif
                 if (!iconLoader.iconDictionary.ContainsKey(iconData.name))
                 {
@@ -153,12 +154,12 @@ namespace YongeTechKerbal
                     catch (ArgumentException)
                     {
 #if DEBUG
-                        Debug.Log("YT_RDIconLoader.LoadIcons: ERROR icon with the name " + iconData.name + "already exisits.");
+                        Log.Info("YT_RDIconLoader.LoadIcons: ERROR icon with the name " + iconData.name + "already exisits.");
 #endif
                     }
                     catch (NullReferenceException)
                     {
-                        Debug.Log("YT_RDIconLoader.LoadIcons: ERROR unable to get texture info for " + iconData.textureURL);
+                        Log.Info("YT_RDIconLoader.LoadIcons: ERROR unable to get texture info for " + iconData.textureURL);
                     }
                 }
             }

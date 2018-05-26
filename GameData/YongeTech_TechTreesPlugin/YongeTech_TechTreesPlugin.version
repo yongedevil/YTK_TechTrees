@@ -1,0 +1,15 @@
+{
+  "NAME": "YongTechTreesPlugin",
+  "URL": "https://raw.githubusercontent.com/linuxgurugamer/YTK_TechTrees/master/YongeTech_TechTreesPlugin.version",
+  "VERSION": {
+    "MAJOR": 0,
+    "MINOR": 5,
+    "PATCH": 2,
+    "BUILD": 1
+  },
+  "KSP_VERSION": {
+    "MAJOR": 1,
+    "MINOR": 4,
+    "PATCH": 1
+  }
+}

@@ -1,11 +1,32 @@
-v1.6
-- Updated for Kerbal 1.4.3
-- Added support to edit the techRequired field for PARTUPGRADE nodes
+0.6.1
+	Merged in changes from original author:
+	v1.6
+	- Updated for Kerbal 1.4.3
+	- Added support to edit the techRequired field for PARTUPGRADE nodes
 
-v1.5
-- Updated for Kerbal 1.3.1
-- Fixed bug where tech trees with a name field were not being loaded.
-- Fixed bug where Module Manager changes to the Unlocks were not loaded.
+	v1.5 
+	- Updated for Kerbal 1.3.1
+	- Fixed bug where tech trees with a name field were not being loaded.
+	- Fixed bug where Module Manager changes to the Unlocks were not loaded.
+
+	Updated .version
+	Added Jenkins config/build
+
+
+0.5.2
+	Updated for KSp 1.3.1
+
+0.5.1.1
+	Removed the RDIcon and Treeconvertor dlls from release
+
+0.5.1
+	Moved DLLs into Plugin directory
+	Moved PluginData into the Plugins directory
+	Added TreeConverter back
+	Set the Treeconvert to be disabled, can be enabled in config (xml) file
+	
+0.5.0
+	Updated for 1.3
 
 v1.4
 - Updated for Kerbal 1.2.2

@@ -116,7 +116,7 @@ namespace YongeTechKerbal
         private void ReadConfigFile()
         {
 #if DEBUG
-            Debug.Log("YT_TechTreesSettings.ReadConfigFile");
+            Log.Info("YT_TechTreesSettings.ReadConfigFile");
 #endif
             //Read Mod Configuration File
             KSP.IO.PluginConfiguration configFile = KSP.IO.PluginConfiguration.CreateForType<YT_TechTreesSettings>();
@@ -170,7 +170,7 @@ namespace YongeTechKerbal
             values += "m_portraitName = " + m_portraitName + "\n";
             values += "m_dropdownTextureName = " + m_dropdownArrowTextureUrl + "\n";
             values += "m_dropdownArrowOpenTextureUrl = " + m_dropdownArrowOpenTextureUrl + "\n";
-            Debug.Log("YT_TechTreesSettings.ReadConfigFile: values\n" + values);
+            Log.Info("YT_TechTreesSettings.ReadConfigFile: values\n" + values);
 #endif
         }
     }
