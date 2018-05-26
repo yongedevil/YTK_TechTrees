@@ -81,7 +81,6 @@ namespace YongeTechKerbal
         {
             m_part_origonalTechRequired = new Dictionary<string, string>();
             m_upgrade_origonalTechRequired = new Dictionary<string, string>();
-            //LoadTechRequiredData();
         }
 
         /************************************************************************\
