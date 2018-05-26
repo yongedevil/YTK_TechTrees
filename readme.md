@@ -1,6 +1,6 @@
 YongeTech Tech Trees Plugin
 version: 1.4
-author: yongedevil  
+author: yongedevil, linuxgurugamer  
 ============================
 
 
@@ -68,6 +68,8 @@ TechTree
       part = standardNoseCone
       part = sensorThermometer
       part = basicFin
+	  
+	  partupgrade = LVT-GasGen-propSys
     }
   }
 
@@ -84,7 +86,10 @@ TechTree
     unlockAllStartParts: If True the mod will automatically unlock all parts in the starting tech node(s), which are any tech nodes with a cost of 0.  This is only relevant if No Entry Purchase Required on Research is disabled in difficulty settings.
 
     3.1.2 Unlocks Node:
-    The Unlocks Node is a new subnode for the RDNode in TechTree.  The Unlocks node has a list of "part" fields containing the names of all the parts unlocked by the RDNode.  The mod will read this data and handle editing the TechRequired on all the parts.
+    The Unlocks Node is a new subnode for the RDNode in TechTree.  The Unlocks node has a list of "part" fields containing the names of all the parts unlocked by the RDNode.  It also supports "partupgrade" fields which take the name of a PARTUPGRADE.  PARTUPGRADE are supported by KSP but only seen in mods such as Porkjet's Stock Engine Overhaul (https://kerbalspaceprogram.com/files/PartOverhauls.zip).
+	
+	The mod will read this data and handle editing the TechRequired on all the parts and partupgrades.
+	
 
 
   3.2 Custom Icons:
